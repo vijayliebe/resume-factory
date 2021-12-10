@@ -1,0 +1,139 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.pl,
+.fl {
+  float: left;
+}
+
+.pr,
+.fr {
+  float: right;
+}
+
+.clear {
+  clear: both;
+}
+
+.ml5 {
+  margin-left: 5px;
+}
+
+.mt5 {
+  margin-top: 5px;
+}
+
+.mr5 {
+  margin-right: 5px;
+}
+
+.mb5 {
+  margin-bottom: 5px;
+}
+
+.pl5 {
+  padding-left: 5px;
+}
+
+.pt5 {
+  padding-top: 5px;
+}
+
+  
+
+.pr5 {
+  padding-right: 5px;
+}
+
+.pb5 {
+  padding-bottom: 5px;
+}
+
+.main-cont {
+  padding: 2em;
+}
+
+.page-cont {
+  width: 100%;
+}
+
+.form-cont {
+  width: 100%;
+}
+
+.addBtn {
+  width: 7em;
+  padding: 10px 10px;
+  font-size: 20px;
+  font-weight: bold;
+  border: none;
+  background: #02ef09;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 5%;
+  right: 2%;
+  border-radius: 50%;
+  border: 2px solid #000;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.closeBtn .closeBtntxt {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.title1 {
+  text-transform: uppercase;
+  color: #242222;
+  font-family: sans-serif;
+}
+
+.title2 {
+  color: #242222;
+  font-family: sans-serif;
+}
+
+.customInputBorder {
+  padding: 11px 20px;
+  border-radius: 5px;
+  position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.23);
+}
+
+.customInputBorder .customInputBorderLabel {
+  padding: 0 3px;
+  background: #fff;
+  color: rgb(0 0 0 / 59%);
+  top: -10px;
+  position: absolute;
+  left: 10px;
+  font-weight: 400;
+  font-size: 0.75em; 
+}
+/* input.formGroup{
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+} */
