@@ -86,8 +86,8 @@ code {
 
 .closeBtn {
   position: absolute;
-  top: 5%;
-  right: 2%;
+  top: 2%;
+  right: 1%;
   border-radius: 50%;
   border: 2px solid #000;
   width: 30px;

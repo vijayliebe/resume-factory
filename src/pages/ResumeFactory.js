@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {AddResume} from '../components/AddResume';
 import {ListResume} from '../components/ListResume';
 import Button from '@mui/material/Button';
 import { Add, Delete } from '@mui/icons-material';
+import {ResumeService} from '../services/ResumeService'
 
 export const ResumeFactory = () => {
     const styles = {
@@ -14,7 +15,8 @@ export const ResumeFactory = () => {
             boxSizing: "border-box"
         } 
     }
-    const [showAddResume, setShowAddResume] = useState(true);
+    const [showAddResume, setShowAddResume] = useState(false);
+    const [resumes, setResumes] = useState([]);
 
     const addResumme = () => {
         console.log("addResumme btn clicked !!!");
@@ -24,6 +26,12 @@ export const ResumeFactory = () => {
     const closeForm = () => {
         setShowAddResume(false);
     }
+
+    // fetch resumes
+    useEffect((e)=>{
+        const resumes = ResumeService.getResumes();
+        setResumes(resumes);
+    }, []);
 
     return (
         <div className="main-cont">
@@ -38,7 +46,7 @@ export const ResumeFactory = () => {
             </div>
             <div className="clear"></div>
             <div style={styles.listResume}>
-                <ListResume />
+                <ListResume resumes={resumes} />
             </div>
         </div>
     );

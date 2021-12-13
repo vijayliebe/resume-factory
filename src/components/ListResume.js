@@ -1,6 +1,8 @@
 import React from 'react';
+import { Edit, Delete, Download, Preview } from '@mui/icons-material';
+import { IconButton, Tooltip } from "@mui/material";
 
-export const ListResume = () => {
+export const ListResume = (props) => {
     const styles = {
         listRowFirst: {
             fontWeight: "bold"
@@ -14,6 +16,18 @@ export const ListResume = () => {
             padding: "5px"
         }
     }
+
+    const deleteResume = () => {
+
+    }
+
+    const editResume = () => {
+        
+    }
+
+    const downloadResume = () => {
+        
+    }
     return (
         <div className="page-cont">
             <hr/>
@@ -24,6 +38,42 @@ export const ListResume = () => {
                 <div className="clear"></div>
             </div>
             <hr/>
+            {props.resumes.map((r, i)=>{
+                const resumeRowDiv = <>
+                                        <div style={styles.listRow}>
+                                            <div className="fl" style={styles.listCol}>{r.name}</div>
+                                            <div className="fl" style={styles.listCol}>{r.title}</div>
+                                            <div className="fl" style={styles.listCol}>
+                                                <Tooltip title="Edit" placement="bottom">
+                                                    <IconButton onClick={()=>{editResume(i)}}>
+                                                        <Edit />
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title="Delete" placement="bottom">
+                                                    <IconButton onClick={()=>{deleteResume(i)}}>
+                                                        <Delete />
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title="Download" placement="bottom">
+                                                    <IconButton onClick={()=>{downloadResume(i)}}>
+                                                        <Download />
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title="Change Template" placement="bottom">
+                                                    <IconButton onClick={()=>{downloadResume(i)}}>
+                                                        <Preview />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            
+                                            </div>
+                                            <div className="clear"></div>
+                                        </div>
+                                        <hr/>
+                                    </>
+                                    
+
+                return resumeRowDiv;
+            })}
         </div>
     )
 }
