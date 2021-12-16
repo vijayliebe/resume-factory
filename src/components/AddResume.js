@@ -23,11 +23,35 @@ export const AddResume = (props) => {
       padding: "1em",
       overflow: "scroll"
     },
+    sectionsCont:{
+      background: "#eee",
+      marginTop: "9px",
+      paddingLeft: "0",
+      boxShadow: "0 0 15px rgba(0,0,0,0.75)",
+      clipPath: "inset(0px -15px 0px 0px)"
+    },
+    sectionsRCont:{
+      padding: "0"
+    },
+    sectionsContLiUl: {
+      listStyleType: "none",
+      paddingLeft: "0"
+    },
+    sectionsContLi:{
+      borderBottom: "1px solid #ccc",
+      padding: "20px 30px",
+      fontSize: "1.2em",
+      textTransform: "uppercase",
+      cursor: "pointer"
+    },
     form: {
+      background: "#eee",
       marginTop: "20px",
       height: "calc(100vh - 200px)",
       overflow: "scroll",
-      marginTop: "20px"
+      marginTop: "8px",
+      boxSizing: "border-box",
+      padding: "1em"
     },
     addDltBtn: {
         paddingTop: "16px"
@@ -35,144 +59,172 @@ export const AddResume = (props) => {
     skillRowMargin: {
       marginBottom: "20px"
     },
+    expRowMargin: {
+      paddingBottom: "2.5em",
+      paddingTop: "2.5em",
+      marginBottom: "1.3em",
+      boxShadow: "0 0 10px rgba(0,0,0,0.75)",
+      clipPath: "inset(0px 0px -10px 0px)"
+    },
     submitBtn:{
       marginTop: "15px",
       marginLeft: "2em",
       float: "left"
     }
   };
+  /* validation - start */
+  const validateInput = (value, validators) => {
+    let errors = [];
+    
+    validators.map((validator)=> {
+      let error;
+      switch(validator.name){
+        case "required" : error = ["", null, undefined].includes(value);              
+          break;
 
-  const [name, setName] = useState({v: ""});
-  const [title, setTitle] = useState({v: "", d: false});
-  const [about, setAbout] = useState({v: "", d: false});
-
-  const [phone, setPhone] = useState({v: "", d: false});
-  const [email, setEmail] = useState({v: "", d: false});
-  const [linkedIn, setLinkedIn] = useState({v: "", d: false});
-  const [location, setLocation] = useState({v: "", d: false});
-
-  const formFields = {
-    "name": {getter: name, setter: setName, errorMessage: "Name is required"},
-    "title": {getter: title, setter: setTitle, errorMessage: "Title is required"},
-    "about": {getter: about, setter: setAbout, errorMessage: "Provide about yourself"},
-
-    "phone": {getter: phone, setter: setPhone, errorMessage: "Phone is required"},
-    "email": {getter: email, setter: setEmail, errorMessage: "Email is required"},
-    "linkedIn": {getter: linkedIn, setter: setLinkedIn, errorMessage: "LinkedIn Url is required"},
-    "location": {getter: location, setter: setLocation, errorMessage: "Location is required"},
+        case "url" :
+        case "email" : const re = new RegExp(validator.pattern, 'i'); error = !["", null, undefined].includes(value) ? !re.test(value)  : "";
+          break;
+      }
+      if(error) errors.push(validator.errorMessage);
+    });
+    return errors;
   }
 
-  const onChange = (e) => {
-    // console.log("onChange :: e.target ::", e.target);
-    const [setter, value, getter] = [formFields[e.target.id]['setter'], e.target.value, formFields[e.target.id]['getter']];
-    if('d' in getter) 
-      setter({v: value, d: true })
-    else 
-      setter({v: value });
+  const validators = {
+    required: {name: "required", errorMessage: "Required"},
+    email: {name: "email", pattern: "^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$", errorMessage: "Invalid email"},
+    url: {name: "url", pattern: "(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})", errorMessage: "Invalid Url"},
   }
+  /* validation - end */
 
-  const onBlue = (e) => {
-    const [setter, value, getter] = [formFields[e.target.id]['setter'], e.target.value, formFields[e.target.id]['getter']];
-    if('d' in getter) 
-      setter({v: value, d: true })
-    else 
-      setter({v: value });
-  }
-
-  const getError = (fieldName) => {
-    console.log("getError :: fieldName ::", fieldName);
-    return formFields[fieldName]['getter']['d'] && formFields[fieldName]['getter']['v'] === "";
-  }
-
-  const getErrorText = (fieldName) => {
-    console.log("getErrorText :: fieldName ::", fieldName);
-    return formFields[fieldName]['getter']['d'] && formFields[fieldName]['getter']['v'] === "" ? formFields[fieldName]["errorMessage"] : "";
-  }
-
-  /* Technical skills - start */
-  let technicalSkillsList = [{name: "", rating: "1", name_d: false}]
-  const [technicalSkills, setTechnicalSkills] = useState(technicalSkillsList);
-  const onChangeTechnicalSkill = (index, key, value) => {
-    technicalSkillsList = JSON.parse(JSON.stringify(technicalSkills));
-    technicalSkillsList[index][key] = value?.toString();
-    technicalSkillsList[index][key+'_d'] = true;
-    setTechnicalSkills(technicalSkillsList);
-  }
-
-  const onTechAddSkill = () => {
-    technicalSkillsList = JSON.parse(JSON.stringify(technicalSkills));
-    technicalSkillsList.push({"name": "", rating: "1", name_d: false});
-    setTechnicalSkills(technicalSkillsList);
-  }
-  const onTechDltSkill = (index) => {
-    technicalSkillsList = JSON.parse(JSON.stringify(technicalSkills));
-    technicalSkillsList.splice(index, 1);
-    setTechnicalSkills(technicalSkillsList);
-  }
-  /* Technical skills - end */
-
-
-  /* Professional skills - start */
-  let professionalSkillsList = [{name: "", rating: "1", name_d: false}]
-  const [professionalSkills, setProfessionalSkills] = useState(professionalSkillsList);
-  const onChangeProfessionalSkill = (index, key, value) => {
-    professionalSkillsList = JSON.parse(JSON.stringify(professionalSkills));
-    professionalSkillsList[index][key] = value?.toString();
-    professionalSkillsList[index][key+'_d'] = true;
-    setProfessionalSkills(professionalSkillsList);
-  }
-
-  const onProfAddSkill = () => {
-    let professionalSkillsCopy = JSON.parse(JSON.stringify(professionalSkills));
-    professionalSkillsCopy.push(professionalSkillsList);
-    setProfessionalSkills(professionalSkillsCopy);
-  }
-  const onProfDltSkill = (index) => {
-    let professionalSkillsCopy = JSON.parse(JSON.stringify(professionalSkills));
-    professionalSkillsCopy.splice(index, 1);
-    setProfessionalSkills(professionalSkillsCopy);
-  }
-  /* Professional skills - end */
-
-  /* Experiance - start */
+  /* form operations - start */
+  const [activeSection, setActiveSection] = useState("gen");
   const date = new Date();
   const d = date.getDate(), m = date.getMonth() + 1, y = date.getFullYear();
   const dateString = '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
-  let experienceList = [{"title": "", "employmentType": "fullTime", "company": "", "location": "", "startDate": dateString, "endDate": dateString, "d_employmentType": "", "d_company": "", "d_location": "", "d_startDate": "", "d_endDate": ""}];
-  const [expereinces, setExperience] = useState(experienceList);
-
-  const onChangeExperience = (index, key, value) => {
-    let expereincesCopy = JSON.parse(JSON.stringify(expereinces));
-    expereincesCopy[index][key] = value?.toString();
-    if (key+'_d' in expereincesCopy[index]) expereincesCopy[index][key+'_d'] = true;
-    setExperience(expereincesCopy);
+  const minTechnicalSkills = 4;
+  const minProfessionalSkills = 4;
+  const generalFieldObj = {value: "", dirty: false, validators: [], errors: []};
+  const getGeneralFieldObj = (validators, value) => {
+    let gfo = JSON.parse(JSON.stringify(generalFieldObj)); gfo.value=value; gfo.validators = validators; return gfo;
   }
 
-  const onExperienceAdd = () => {
-    let expereincesCopy = JSON.parse(JSON.stringify(expereinces));
-    expereincesCopy.push(experienceList);
-    setExperience(expereincesCopy);
+  const fieldsmap = {
+    "experiences": {
+      "title": getGeneralFieldObj([validators.required]), 
+      "employmentType": getGeneralFieldObj([validators.required], 'fullTime'),
+      "fullTime": getGeneralFieldObj([validators.required]),
+      "company": getGeneralFieldObj([validators.required]), 
+      "location": getGeneralFieldObj([validators.required]),
+      "startDate": getGeneralFieldObj([validators.required], dateString),
+      "endDate": getGeneralFieldObj([validators.required], dateString)
+    }
   }
 
-  const onExperienceDlt = (index) => {
-    let expereincesCopy = JSON.parse(JSON.stringify(expereinces));
-    expereincesCopy.splice(index, 1);
-    setExperience(expereincesCopy);
+  const generalFields = { 
+    "name": getGeneralFieldObj([validators.required]),
+    "title": getGeneralFieldObj([validators.required]), 
+    "about": getGeneralFieldObj([validators.required]),
+    "phone": getGeneralFieldObj([validators.required]),
+    "email": getGeneralFieldObj([validators.required, validators.email]), 
+    "linkedIn": getGeneralFieldObj([validators.required, validators.url]), 
+    "location": getGeneralFieldObj([validators.required]),
   }
-  /* Experiance - end */
+
+  const technicalSkillFields = {
+    "skills": new Array(minTechnicalSkills).fill(getGeneralFieldObj([validators.required])),
+    "ratings": new Array(minTechnicalSkills).fill(getGeneralFieldObj([validators.required], 1)) 
+  }
+
+  const professionalSkillFields = {
+    "skills": new Array(minProfessionalSkills).fill(getGeneralFieldObj([validators.required])),
+    "ratings": new Array(minProfessionalSkills).fill(getGeneralFieldObj([validators.required], 1)) 
+  }
+
+  const experiencesFields = [fieldsmap.experiences]
+
+  const resumeFormFieldsObj = {
+    "general": generalFields,
+    "technicalSkills": technicalSkillFields,
+    "professionalSkills": professionalSkillFields,
+    "experiences": experiencesFields,
+    "educations": {},
+    "projects": {},
+    "certificates": {}
+  };
+  
+  const [resumeFormFields, setResumeFormFields] = useState(resumeFormFieldsObj);
+
+  const onFormFieldChange = (e, formNames) => {
+    const [inputValue] = [e.target.value];
+    let copyResumeFormFields = JSON.parse(JSON.stringify(resumeFormFields));
+    let formField = copyResumeFormFields;
+    for(let fn of formNames){
+        formField = formField[fn]
+    }
+
+    const errors = validateInput(inputValue, formField.validators);
+
+    formField.value = inputValue;
+    'dirty' in formField ? formField.dirty = true : delete formField.dirty;
+    formField.errors = errors;
+
+    // console.log("onGeneralFieldChange :: formField ::", formField);
+    // console.log("onGeneralFieldChange :: copyResumeFormFields ::", copyResumeFormFields);
+
+    setResumeFormFields(copyResumeFormFields);
+  }
+
+  const onAdd = (formNames, fieldsmapObj) => {
+    let copyResumeFormFields = JSON.parse(JSON.stringify(resumeFormFields));
+    let tsList = copyResumeFormFields;
+    for(let fn of formNames){
+      tsList = tsList[fn]
+    }
+
+    if(formNames.includes("technicalSkills") || formNames.includes("professionalSkills") ){
+      tsList.skills.push(getGeneralFieldObj([validators.required]));
+      tsList.ratings.push(getGeneralFieldObj([validators.required], 1));
+    } else {
+      tsList.push(fieldsmap[fieldsmapObj]);
+    }
+
+    setResumeFormFields(copyResumeFormFields);
+  }
+  const onDlt = (formNames, index) => {
+    let copyResumeFormFields = JSON.parse(JSON.stringify(resumeFormFields));
+    let tsList = copyResumeFormFields;
+    for(let fn of formNames){
+      tsList = tsList[fn]
+    }
+
+    if(formNames.includes("technicalSkills") || formNames.includes("professionalSkills") ){
+      tsList.skills.splice(index, 1);
+      tsList.ratings.splice(index, 1);
+    } else {
+      tsList.splice(index, 1);
+    }
+
+    setResumeFormFields(copyResumeFormFields);
+  }
+
+
+
+  /* form operations - end */
 
   const isFormValid = () => {
     let resumePayload = {};
 
-    Object.keys(formFields).forEach((key)=>{
+    /* Object.keys(formFields).forEach((key)=>{
       //console.log(formFields[key]['getter']['v']);
       resumePayload[key] = formFields[key]['getter']['v'];
     });
 
     resumePayload['technicalSkills'] = technicalSkills.map((ts)=> {return {"name": ts.name, "rating": ts.rating}});
     resumePayload['professionalSkills'] = professionalSkills.map((ps)=> {return {"name": ps.name, "rating": ps.rating}});
-    resumePayload['expereinces'] = expereinces.map((exp)=> {return {"title": exp.title, "employmentType": exp.employmentType, "company": exp.company, "location": exp.location, "startDate": exp.startDate, "endDate": exp.endDate}});
-
+    resumePayload['experiences'] = experiences.map((exp)=> {return {"title": exp.title, "employmentType": exp.employmentType, "company": exp.company, "location": exp.location, "startDate": exp.startDate, "endDate": exp.endDate}});
+ */
     return resumePayload;
   }
   const onFormSubmit = () => {
@@ -196,368 +248,693 @@ export const AddResume = (props) => {
         <div className="closeBtntxt">X</div>
       </div>
 
-      <form style={addResumeCont.form}>
-         <h2 className="title2">Introduction</h2>
-        <Card>
-          <CardContent>
-            <Grid container spacing={2}>
-              <Grid item xs={6} md={6} sx={6}>
-                {/* <input className="formGroup" type="text" id="name" placeholder="Name" />     */}
-                <TextField
-                  id="name"
-                  label="Name"
-                  variant="outlined"
-                  value={name.v}
-                  onChange={(e)=>{onChange(e)} }
-                  onBlur={(e)=>{onBlue(e)} }
-                  error={name && getError("name")}
-                  helperText={name && getErrorText("name")}
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={6} md={6} sx={6}>
-                <TextField
-                  id="title"
-                  label="Title eg. Full Stack Developer @ABC"
-                  variant="outlined"
-                  onChange={(e)=>{onChange(e)} }
-                  onBlur={(e)=>{onBlue(e)} }
-                  error={title && getError("title")}
-                  helperText={title && getErrorText("title")}
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12} md={12}>
-                <TextField
-                  id="about"
-                  label="About Yourself..."
-                  multiline
-                  rows={2}
-                  onChange={(e)=>{onChange(e)} }
-                  onBlur={(e)=>{onBlue(e)} }
-                  error={about && getError("about")}
-                  helperText={about && getErrorText("about")}
-                  fullWidth
-                />
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
+      <Grid container spacing={2}>
+        <Grid style={addResumeCont.sectionsCont} item xs={2} md={2} sx={2}>
+          <ul style={addResumeCont.sectionsContLiUl}>
+          <li
+              style={addResumeCont.sectionsContLi}
+              className={'section ' + (activeSection === "gen" && 'activeSection')}
+              onClick={() => {
+                setActiveSection("gen");
+              }}
+            >
+              General
+            </li>
 
-        <h2 className="title2">Contact Details</h2>
-        <Card>
-          <CardContent>
-            <Grid container spacing={2}>
-              <Grid item xs={3} md={3} sx={3}>
-                <TextField
-                  id="phone"
-                  label="Phone"
-                  type="number"
-                  variant="outlined"
-                  onChange={(e)=>{onChange(e)} }
-                  onBlur={(e)=>{onBlue(e)} }
-                  error={phone && getError("phone")}
-                  helperText={phone && getErrorText("phone")}
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={3} md={3}>
-                <TextField
-                  id="email"
-                  label="Email"
-                  type="email"
-                  variant="outlined"
-                  onChange={(e)=>{onChange(e)} }
-                  onBlur={(e)=>{onBlue(e)} }
-                  error={email && getError("email")}
-                  helperText={email && getErrorText("email")}
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={3} md={3}>
-                <TextField
-                  id="linkedIn"
-                  label="LinkedIn Url"
-                  type="text"
-                  variant="outlined"
-                  onChange={(e)=>{onChange(e)} }
-                  onBlur={(e)=>{onBlue(e)} }
-                  error={linkedIn && getError("linkedIn")}
-                  helperText={linkedIn && getErrorText("linkedIn")}
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={3} md={3}>
-                <TextField
-                  id="location"
-                  label="Present location eg. Bangalore"
-                  type="text"
-                  variant="outlined"
-                  onChange={(e)=>{onChange(e)} }
-                  onBlur={(e)=>{onBlue(e)} }
-                  error={location && getError("location")}
-                  helperText={location && getErrorText("location")}
-                  fullWidth
-                />
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
+            {/* <li
+              style={addResumeCont.sectionsContLi}
+              className={'section ' + (activeSection === "intro" && 'activeSection')}
+              onClick={() => {
+                setActiveSection("intro");
+              }}
+            >
+              Introduction
+            </li>
+            <li
+              style={addResumeCont.sectionsContLi}
+              className={'section ' + (activeSection === "cd" && 'activeSection')}
+              onClick={() => {
+                setActiveSection("cd");
+              }}
+            >
+              Contact Details
+            </li> */}
+            <li
+              style={addResumeCont.sectionsContLi}
+              className={'section ' + (activeSection === "ts" && 'activeSection')}
+              onClick={() => {
+                setActiveSection("ts");
+              }}
+            >
+              Technical Skills
+            </li>
+            <li
+              style={addResumeCont.sectionsContLi}
+              className={'section ' + (activeSection === "ps" && 'activeSection')}
+              onClick={() => {
+                setActiveSection("ps");
+              }}
+            >
+              Professional Skills
+            </li>
+            <li
+              style={addResumeCont.sectionsContLi}
+              className={'section ' + (activeSection === "exp" && 'activeSection')}
+              onClick={() => {
+                setActiveSection("exp");
+              }}
+            >
+              Experiences
+            </li>
+          </ul>
+        </Grid>
 
-        {/* Technical skills - start */}
-        <h2 className="title2">Technical Skills</h2>
-        <Card>
-          <CardContent>
-            {technicalSkills.map((ts, i)=>{
-              const tsdiv = <Grid key={'row_'+i} style={addResumeCont.skillRowMargin} container spacing={2}>
-                              <Grid item xs={5} md={5} sx={5}>
-                                <TextField
-                                  id={'name_' + (i+1)}
-                                  label={'Skill Name ' + (i+1)}
-                                  type="text"
-                                  value={ts.name}
-                                  onChange={(e)=>{onChangeTechnicalSkill(i, 'name',e.target.value)}}
-                                  onBlur={(e)=>{onChangeTechnicalSkill(i, 'name',e.target.value)}}
-                                  error={ts.name_d && ts.name === ""}
-                                  helperText={ts.name_d && ts.name === "" ? "Provide Skill Name": ""}
-                                  variant="outlined"
-                                  fullWidth
-                                />
-                              </Grid>
-                              <Grid item xs={5} md={5} sx={5}>
-                                  <div className="customInputBorder">
-                                    <div className="customInputBorderLabel">Rating<bold>({ts.rating})</bold></div>
-                                    <Slider
-                                            aria-label="Rating"
-                                            defaultValue={1}
-                                            valueLabelDisplay="auto"
-                                            marks
-                                            value={ts.rating}
-                                            onChange={(e)=>{onChangeTechnicalSkill(i, 'rating', e.target.value)}}
-                                            min={1}
-                                            max={10}/>
-                                  </div>
-                                
-                              </Grid>
-                              <Grid item xs={2} md={2} sx={2}>
-                                    <div style={addResumeCont.addDltBtn}>
-                                        {i === technicalSkills.length - 1 &&
-                                          <Tooltip title="Add New Skill" placement="bottom">
-                                          <IconButton onClick={()=>{onTechAddSkill()}}>
-                                            <AddCircleOutlineOutlinedIcon /> 
-                                          </IconButton>
-                                        </Tooltip>
-                                        }
-                                       
-                                        <Tooltip title="Delete Skill" placement="bottom" >
-                                          <IconButton onClick={()=>{onTechDltSkill(i)}}>
-                                            <Delete />
-                                          </IconButton>
-                                        </Tooltip>
-                                    </div>
-                              </Grid>
+        <Grid style={addResumeCont.sectionsRCont}  item xs={10} md={10} sx={10}>
+          <form style={addResumeCont.form}>
+            {(activeSection === "intro" || activeSection === "gen") && (
+              <>
+                <h2 className="title2">Introduction</h2>
+                <Card>
+                  <CardContent>
+                    <Grid container spacing={2}>
+                      <Grid item xs={6} md={6} sx={6}>
+                        {/* <input className="formGroup" type="text" id="name" placeholder="Name" />     */}
+                        <TextField
+                          id="name"
+                          label="Name"
+                          variant="outlined"
+                          value={resumeFormFields.general.name.value}
+                          onChange={(e) => {
+                            onFormFieldChange(e, ["general", "name"]);
+                          }}
+                          onBlur={(e) => {
+                            onFormFieldChange(e, ["general", "name"]);
+                          }}
+                          error={resumeFormFields.general.name.errors.length}
+                          helperText={resumeFormFields.general.name.errors.join(
+                            "\n"
+                          )}
+                          fullWidth
+                        />
+                      </Grid>
+                      <Grid item xs={6} md={6} sx={6}>
+                        <TextField
+                          id="title"
+                          label="Title eg. Full Stack Developer @ABC"
+                          variant="outlined"
+                          value={resumeFormFields.general.title.value}
+                          onChange={(e) => {
+                            onFormFieldChange(e, ["general", "title"]);
+                          }}
+                          onBlur={(e) => {
+                            onFormFieldChange(e, ["general", "title"]);
+                          }}
+                          error={resumeFormFields.general.title.errors.length}
+                          helperText={resumeFormFields.general.title.errors.join(
+                            "\n"
+                          )}
+                          fullWidth
+                        />
+                      </Grid>
+                      <Grid item xs={12} md={12}>
+                        <TextField
+                          id="about"
+                          label="About Yourself..."
+                          multiline
+                          rows={2}
+                          value={resumeFormFields.general.about.value}
+                          onChange={(e) => {
+                            onFormFieldChange(e, ["general", "about"]);
+                          }}
+                          onBlur={(e) => {
+                            onFormFieldChange(e, ["general", "about"]);
+                          }}
+                          error={resumeFormFields.general.about.errors.length}
+                          helperText={resumeFormFields.general.about.errors.join(
+                            "\n"
+                          )}
+                          fullWidth
+                        />
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                </Card>
+              </>
+            )}
+
+            {(activeSection === "cd" || activeSection === "gen") && (
+              <>
+                <h2 className="title2">Contact Details</h2>
+                <Card>
+                  <CardContent>
+                    <Grid container spacing={2}>
+                      <Grid item xs={6} md={6} sx={6}>
+                        <TextField
+                          id="phone"
+                          label="Phone"
+                          type="number"
+                          variant="outlined"
+                          value={resumeFormFields.general.phone.value}
+                          onChange={(e) => {
+                            onFormFieldChange(e, ["general", "phone"]);
+                          }}
+                          onBlur={(e) => {
+                            onFormFieldChange(e, ["general", "phone"]);
+                          }}
+                          error={resumeFormFields.general.phone.errors.length}
+                          helperText={resumeFormFields.general.phone.errors.join(
+                            "\n"
+                          )}
+                          fullWidth
+                        />
+                      </Grid>
+                      <Grid item xs={6} md={6}>
+                        <TextField
+                          id="email"
+                          label="Email"
+                          type="email"
+                          variant="outlined"
+                          value={resumeFormFields.general.email.value}
+                          onChange={(e) => {
+                            onFormFieldChange(e, ["general", "email"]);
+                          }}
+                          onBlur={(e) => {
+                            onFormFieldChange(e, ["general", "email"]);
+                          }}
+                          error={resumeFormFields.general.email.errors.length}
+                          helperText={resumeFormFields.general.email.errors.join(
+                            "\n"
+                          )}
+                          fullWidth
+                        />
+                      </Grid>
+                      <Grid item xs={6} md={6}>
+                        <TextField
+                          id="linkedIn"
+                          label="LinkedIn Url"
+                          type="text"
+                          variant="outlined"
+                          value={resumeFormFields.general.linkedIn.value}
+                          onChange={(e) => {
+                            onFormFieldChange(e, ["general", "linkedIn"]);
+                          }}
+                          onBlur={(e) => {
+                            onFormFieldChange(e, ["general", "linkedIn"]);
+                          }}
+                          error={
+                            resumeFormFields.general.linkedIn.errors.length
+                          }
+                          helperText={resumeFormFields.general.linkedIn.errors.join(
+                            "\n"
+                          )}
+                          fullWidth
+                        />
+                      </Grid>
+                      <Grid item xs={6} md={6}>
+                        <TextField
+                          id="location"
+                          label="Present location eg. Bangalore"
+                          type="text"
+                          variant="outlined"
+                          value={resumeFormFields.general.location.value}
+                          onChange={(e) => {
+                            onFormFieldChange(e, ["general", "location"]);
+                          }}
+                          onBlur={(e) => {
+                            onFormFieldChange(e, ["general", "location"]);
+                          }}
+                          error={
+                            resumeFormFields.general.location.errors.length
+                          }
+                          helperText={resumeFormFields.general.location.errors.join(
+                            "\n"
+                          )}
+                          fullWidth
+                        />
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                </Card>
+              </>
+            )}
+
+            {activeSection === "ts" && (
+              <>
+                {/* Technical skills - start */}
+                <h2 className="title2">Technical Skills</h2>
+                <Card>
+                  <CardContent>
+                    {resumeFormFields.technicalSkills.skills.map((ts, i) => {
+                      const tsr = resumeFormFields.technicalSkills.ratings[i];
+                      const tsdiv = (
+                        <Grid
+                          key={"row_" + i}
+                          style={addResumeCont.skillRowMargin}
+                          container
+                          spacing={2}
+                        >
+                          <Grid item xs={5} md={5} sx={5}>
+                            <TextField
+                              id={"name_" + (i + 1)}
+                              label={"Skill Name " + (i + 1)}
+                              type="text"
+                              value={ts.value}
+                              onChange={(e) => {
+                                onFormFieldChange(e, [
+                                  "technicalSkills",
+                                  "skills",
+                                  i,
+                                ]);
+                              }}
+                              onBlur={(e) => {
+                                onFormFieldChange(e, [
+                                  "technicalSkills",
+                                  "skills",
+                                  i,
+                                ]);
+                              }}
+                              error={ts.errors.length}
+                              helperText={ts.errors.join("\n")}
+                              variant="outlined"
+                              fullWidth
+                            />
+                          </Grid>
+                          <Grid item xs={5} md={5} sx={5}>
+                            <div className="customInputBorder">
+                              <div className="customInputBorderLabel">
+                                Rating<bold>({tsr.value})</bold>
+                              </div>
+                              <Slider
+                                aria-label="Rating"
+                                defaultValue={1}
+                                valueLabelDisplay="auto"
+                                marks
+                                value={tsr.value}
+                                onChange={(e) => {
+                                  onFormFieldChange(e, [
+                                    "technicalSkills",
+                                    "ratings",
+                                    i,
+                                  ]);
+                                }}
+                                min={1}
+                                max={10}
+                              />
+                            </div>
+                          </Grid>
+                          <Grid item xs={2} md={2} sx={2}>
+                            <div style={addResumeCont.addDltBtn}>
+                              {i ===
+                                resumeFormFields.technicalSkills.skills.length -
+                                  1 && (
+                                <Tooltip
+                                  title="Add New Skill"
+                                  placement="bottom"
+                                >
+                                  <IconButton
+                                    onClick={() => {
+                                      onAdd(["technicalSkills"]);
+                                    }}
+                                  >
+                                    <AddCircleOutlineOutlinedIcon />
+                                  </IconButton>
+                                </Tooltip>
+                              )}
+                              {i >= minTechnicalSkills && (
+                                <Tooltip
+                                  title="Delete Skill"
+                                  placement="bottom"
+                                >
+                                  <IconButton
+                                    onClick={() => {
+                                      onDlt(["technicalSkills"], i);
+                                    }}
+                                  >
+                                    <Delete />
+                                  </IconButton>
+                                </Tooltip>
+                              )}
+                            </div>
+                          </Grid>
+                        </Grid>
+                      );
+                      return tsdiv;
+                    })}
+                  </CardContent>
+                </Card>
+                {/* Technical skills - end */}
+              </>
+            )}
+
+            {activeSection === "ps" && (
+              <>
+                {/* Professional skills - start */}
+                <h2 className="title2">Professional Skills</h2>
+                <Card>
+                  <CardContent>
+                    {resumeFormFields.professionalSkills.skills.map((ps, i) => {
+                      const psr =
+                        resumeFormFields.professionalSkills.ratings[i];
+                      const psdiv = (
+                        <Grid
+                          key={"row_" + i}
+                          style={addResumeCont.skillRowMargin}
+                          container
+                          spacing={2}
+                        >
+                          <Grid item xs={5} md={5} sx={5}>
+                            <TextField
+                              id={"name_" + (i + 1)}
+                              label={"Skill Name " + (i + 1)}
+                              type="text"
+                              value={ps.value}
+                              onChange={(e) => {
+                                onFormFieldChange(e, [
+                                  "professionalSkills",
+                                  "skills",
+                                  i,
+                                ]);
+                              }}
+                              onBlur={(e) => {
+                                onFormFieldChange(e, [
+                                  "professionalSkills",
+                                  "skills",
+                                  i,
+                                ]);
+                              }}
+                              error={ps.errors.length}
+                              helperText={ps.errors.join("\n")}
+                              variant="outlined"
+                              fullWidth
+                            />
+                          </Grid>
+                          <Grid item xs={5} md={5} sx={5}>
+                            <div className="customInputBorder">
+                              <div className="customInputBorderLabel">
+                                Rating({psr.value})
+                              </div>
+                              <Slider
+                                aria-label="Rating"
+                                defaultValue={1}
+                                valueLabelDisplay="auto"
+                                marks
+                                value={psr.value}
+                                onChange={(e) => {
+                                  onFormFieldChange(e, [
+                                    "professionalSkills",
+                                    "ratings",
+                                    i,
+                                  ]);
+                                }}
+                                min={1}
+                                max={10}
+                              />
+                            </div>
+                          </Grid>
+                          <Grid item xs={2} md={2} sx={2}>
+                            <div style={addResumeCont.addDltBtn}>
+                              {i ===
+                                resumeFormFields.professionalSkills.skills
+                                  .length -
+                                  1 && (
+                                <Tooltip
+                                  title="Add New Skill"
+                                  placement="bottom"
+                                >
+                                  <IconButton
+                                    onClick={() => {
+                                      onAdd(["professionalSkills"]);
+                                    }}
+                                  >
+                                    <AddCircleOutlineOutlinedIcon />
+                                  </IconButton>
+                                </Tooltip>
+                              )}
+                              {i >= minProfessionalSkills && (
+                                <Tooltip
+                                  title="Delete Skill"
+                                  placement="bottom"
+                                >
+                                  <IconButton
+                                    onClick={() => {
+                                      onDlt(["professionalSkills"], i);
+                                    }}
+                                  >
+                                    <Delete />
+                                  </IconButton>
+                                </Tooltip>
+                              )}
+                            </div>
+                          </Grid>
+                        </Grid>
+                      );
+                      return psdiv;
+                    })}
+                  </CardContent>
+                </Card>
+                {/* Professional skills - end */}
+              </>
+            )}
+
+            {activeSection === "exp" && (
+              <>
+                <h2 className="title2">Experience </h2>
+                <Card>
+                  <CardContent className="p-rel">
+                    {resumeFormFields.experiences.map((experience, i) => {
+                      const expDiv = (
+                        <>
+                          <div className="snodiv">{'#EXPERIENCE : ' + (i+1)}</div>
+                          <Grid
+                            style={addResumeCont.expRowMargin}
+                            container
+                            spacing={2}
+                          >
+                            <Grid item xs={3} md={3} sx={3}>
+                              <TextField
+                                id={"title" + (i + 1)}
+                                label="Title"
+                                type="text"
+                                variant="outlined"
+                                fullWidth
+                                value={experience.title.value}
+                                onChange={(e) => {
+                                  onFormFieldChange(e, [
+                                    "experiences",
+                                    i,
+                                    "title",
+                                  ]);
+                                }}
+                                onBlur={(e) => {
+                                  onFormFieldChange(e, [
+                                    "experiences",
+                                    i,
+                                    "title",
+                                  ]);
+                                }}
+                                error={experience.title.errors.length}
+                                helperText={experience.title.errors.join("\n")}
+                              />
                             </Grid>
-              return tsdiv;
-            })}
-          </CardContent>
-        </Card>
-        {/* Technical skills - end */}
 
-        {/* Professional skills - start */}
-        <h2 className="title2">Professional Skills</h2>
-        <Card>
-          <CardContent>
-          {professionalSkills.map((ts, i)=>{
-              const tsdiv = <Grid style={addResumeCont.skillRowMargin} container spacing={2}>
-                              <Grid item xs={5} md={5} sx={5}>
-                                <TextField
-                                  id={'name_' + (i+1)}
-                                  label={'Skill Name ' + (i+1)}
-                                  type="text"
-                                  value={ts.name}
-                                  onChange={(e)=>{onChangeProfessionalSkill(i, 'name',e.target.value)}}
-                                  onBlur={(e)=>{onChangeProfessionalSkill(i, 'name',e.target.value)}}
-                                  error={ts.name_d && ts.name === ""}
-                                  helperText={ts.name_d && ts.name === "" ? "Provide Skill Name": ""}
-                                  variant="outlined"
-                                  fullWidth
-                                />
-                              </Grid>
-                              <Grid item xs={5} md={5} sx={5}>
-                                  <div className="customInputBorder">
-                                    <div className="customInputBorderLabel">Rating({ts.rating})</div>
-                                    <Slider
-                                            aria-label="Rating"
-                                            defaultValue={1}
-                                            valueLabelDisplay="auto"
-                                            marks
-                                            value={ts.rating}
-                                            onChange={(e)=>{onChangeProfessionalSkill(i, 'rating', e.target.value)}}
-                                            min={1}
-                                            max={10}/>
-                                  </div>
-                                
-                              </Grid>
-                              <Grid item xs={2} md={2} sx={2}>
-                                    <div style={addResumeCont.addDltBtn}>
-                                        {i === professionalSkills.length - 1 &&
-                                          <Tooltip title="Add New Skill" placement="bottom">
-                                          <IconButton onClick={()=>{onProfAddSkill()}}>
-                                            <AddCircleOutlineOutlinedIcon /> 
-                                          </IconButton>
-                                        </Tooltip>
-                                        }
-                                       
-                                        <Tooltip title="Delete Skill" placement="bottom">
-                                          <IconButton onClick={()=>{onProfDltSkill(i)}}>
-                                            <Delete />
-                                          </IconButton>
-                                        </Tooltip>
-                                    </div>
-                              </Grid>
+                            <Grid item xs={4} md={4} sx={4}>
+                              <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">
+                                  Employment Type
+                                </InputLabel>
+                                <Select
+                                  labelId={"employmentType_" + (i + 1)}
+                                  id={"employmentType_" + (i + 1)}
+                                  value={experience.employmentType.value}
+                                  label="Employment Type"
+                                  onChange={(e) => {
+                                    onFormFieldChange(e, [
+                                      "experiences",
+                                      i,
+                                      "employmentType",
+                                    ]);
+                                  }}
+                                >
+                                  <MenuItem value="fullTime">Full-time</MenuItem>
+                                  <MenuItem value="partTime">Part-time</MenuItem>
+                                  <MenuItem value="selfEmployed">
+                                    Self-employed
+                                  </MenuItem>
+                                </Select>
+                              </FormControl>
                             </Grid>
-              return tsdiv;
-            })}
-          </CardContent>
-        </Card>
-        {/* Professional skills - end */}
 
-        <h2 className="title2">Experience </h2>
-        <Card>
-          <CardContent>
-            {expereinces.map((experience, i)=>{
-               const expDiv =  <Grid style={addResumeCont.skillRowMargin} container spacing={2}>
-                <Grid item xs={4} md={4} sx={4}>
-                  <TextField
-                    id={'title'+(i+1)}
-                    label="Title"
-                    type="text"
-                    variant="outlined"
-                    fullWidth
-                    value={experience.title}
-                    onChange={(e)=>{onChangeExperience(i, 'title',e.target.value)}}
-                    onBlur={(e)=>{onChangeExperience(i, 'title',e.target.value)}}
-                    error={experience.title_d && experience.title === ""}
-                    helperText={experience.title_d && experience.title === "" ? "Title is required": ""}
-                  />
-                </Grid>
-  
-                <Grid item xs={4} md={4} sx={4}>
-                  <FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">Employment Type</InputLabel>
-                      <Select
-                          labelId={'employmentType_'+(i+1)}
-                          id={'employmentType_'+(i+1)}
-                          value={experience.employmentType}
-                          label="Employment Type"
-                          onChange={(e)=>{onChangeExperience(i, 'employmentType',e.target.value)}}
-                      >
-                          <MenuItem value="fullTime">Full-time</MenuItem>
-                          <MenuItem value="partTime">Part-time</MenuItem>
-                          <MenuItem value="selfEmployed">Self-employed</MenuItem>
-                      </Select>
-                      </FormControl>
-                </Grid>
-  
-                <Grid item xs={4} md={4} sx={4}>
-                  <TextField
-                    id={'company'+(i+1)}
-                    label="Company"
-                    type="text"
-                    variant="outlined"
-                    fullWidth
-                    value={experience.company}
-                    onChange={(e)=>{onChangeExperience(i, 'company',e.target.value)}}
-                    onBlur={(e)=>{onChangeExperience(i, 'company',e.target.value)}}
-                    error={experience.company_d && experience.company === ""}
-                    helperText={experience.company_d && experience.company === "" ? "Company is required": ""}
-                  />
-                </Grid>
-  
-                <Grid item xs={2} md={2} sx={2}>
-                  <TextField
-                    id={'location'+(i+1)}
-                    label="Location"
-                    type="text"
-                    variant="outlined"
-                    fullWidth
-                    value={experience.location}
-                    onChange={(e)=>{onChangeExperience(i, 'location',e.target.value)}}
-                    onBlur={(e)=>{onChangeExperience(i, 'location',e.target.value)}}
-                    error={experience.location_d && experience.location === ""}
-                    helperText={experience.location_d && experience.location === "" ? "Location is required": ""}
-                  />
-                </Grid>
-  
-                <Grid item xs={4} md={4} sx={4}>
-                  <TextField
-                    id={'sd'+(i+1)}
-                    label="Start Date"
-                    type="date"
-                    sx={{ width: "100%" }}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    value={experience.startDate}
-                    onChange={(e)=>{onChangeExperience(i, 'startDate',e.target.value)}}
-                    onBlur={(e)=>{onChangeExperience(i, 'startDate',e.target.value)}}
-                    error={experience.startDate_d && experience.startDate === ""}
-                    helperText={experience.startDate_d && experience.startDate === "" ? "Start Date is required": ""}
-                  />
-                </Grid>
+                            <Grid item xs={4} md={4} sx={4}>
+                              <TextField
+                                id={"company" + (i + 1)}
+                                label="Company"
+                                type="text"
+                                variant="outlined"
+                                fullWidth
+                                value={experience.company.value}
+                                onChange={(e) => {
+                                  onFormFieldChange(e, [
+                                    "experiences",
+                                    i,
+                                    "company",
+                                  ]);
+                                }}
+                                onBlur={(e) => {
+                                  onFormFieldChange(e, [
+                                    "experiences",
+                                    i,
+                                    "company",
+                                  ]);
+                                }}
+                                error={experience.company.errors.length}
+                                helperText={experience.company.errors.join("\n")}
+                              />
+                            </Grid>
 
-                <Grid item xs={4} md={4} sx={4}>
-                  <TextField
-                    id={'ed'+(i+1)}
-                    label="End Date"
-                    type="date"
-                    sx={{ width: "100%" }}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    value={experience.endDate}
-                    onChange={(e)=>{onChangeExperience(i, 'endDate',e.target.value)}}
-                    onBlur={(e)=>{onChangeExperience(i, 'endDate',e.target.value)}}
-                    error={experience.endDate_d && experience.endDate === ""}
-                    helperText={experience.endDate_d && experience.endDate === "" ? "End Date is required": ""}
-                  />
+                            <Grid item xs={3} md={3} sx={3}>
+                              <TextField
+                                id={"location" + (i + 1)}
+                                label="Location"
+                                type="text"
+                                variant="outlined"
+                                fullWidth
+                                value={experience.location.value}
+                                onChange={(e) => {
+                                  onFormFieldChange(e, [
+                                    "experiences",
+                                    i,
+                                    "location",
+                                  ]);
+                                }}
+                                onBlur={(e) => {
+                                  onFormFieldChange(e, [
+                                    "experiences",
+                                    i,
+                                    "location",
+                                  ]);
+                                }}
+                                error={experience.location.errors.length}
+                                helperText={experience.location.errors.join("\n")}
+                              />
+                            </Grid>
 
+                            <Grid item xs={4} md={4} sx={4}>
+                              <TextField
+                                id={"startDate" + (i + 1)}
+                                label="Start Date"
+                                type="date"
+                                sx={{ width: "100%" }}
+                                InputLabelProps={{
+                                  shrink: true,
+                                }}
+                                value={experience.startDate.value}
+                                onChange={(e) => {
+                                  onFormFieldChange(e, [
+                                    "experiences",
+                                    i,
+                                    "startDate",
+                                  ]);
+                                }}
+                                onBlur={(e) => {
+                                  onFormFieldChange(e, [
+                                    "experiences",
+                                    i,
+                                    "startDate",
+                                  ]);
+                                }}
+                                error={experience.startDate.errors.length}
+                                helperText={experience.startDate.errors.join(
+                                  "\n"
+                                )}
+                              />
+                            </Grid>
 
-                  {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DatePicker
-                      label="Start Date"
-                      type="date"
-                      renderInput={(params) => <TextField {...params} />}
-                    />
-                  </LocalizationProvider>
-                 */}
-                </Grid>
-    
-                <Grid item xs={2} md={2} sx={2}>
-                      {i === expereinces.length - 1 &&
-                        <Tooltip title="Add New Skill" placement="bottom">
-                          <IconButton onClick={()=>{onExperienceAdd()}}>
-                            <AddCircleOutlineOutlinedIcon /> 
-                          </IconButton>
-                        </Tooltip>
-                      }
-                      
-                      <Tooltip title="Delete Skill" placement="bottom">
-                        <IconButton onClick={()=>{onExperienceDlt(i)}}>
-                          <Delete />
-                        </IconButton>
-                      </Tooltip>
+                            <Grid item xs={4} md={4} sx={4}>
+                              <TextField
+                                id={"ed" + (i + 1)}
+                                label="End Date"
+                                type="date"
+                                sx={{ width: "100%" }}
+                                InputLabelProps={{
+                                  shrink: true,
+                                }}
+                                value={experience.endDate.value}
+                                onChange={(e) => {
+                                  onFormFieldChange(e, [
+                                    "experiences",
+                                    i,
+                                    "endDate",
+                                  ]);
+                                }}
+                                onBlur={(e) => {
+                                  onFormFieldChange(e, [
+                                    "experiences",
+                                    i,
+                                    "endDate",
+                                  ]);
+                                }}
+                                error={experience.endDate.errors.length}
+                                helperText={experience.endDate.errors.join("\n")}
+                              />
 
-                </Grid>
-              </Grid>
-              return expDiv;
-            })}
-          </CardContent>
-        </Card>
+                              {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <DatePicker
+                                      label="Start Date"
+                                      type="date"
+                                      renderInput={(params) => <TextField {...params} />}
+                                    />
+                                  </LocalizationProvider>
+                                */}
+                            </Grid>
 
-      </form>
+                            <Grid item xs={1} md={1} sx={1}>
+                              {i === resumeFormFields.experiences.length - 1 && (
+                                <Tooltip title="Add New Skill" placement="bottom">
+                                  <IconButton
+                                    onClick={() => {
+                                      onAdd(["experiences"], "experiences");
+                                    }}
+                                  >
+                                    <AddCircleOutlineOutlinedIcon />
+                                  </IconButton>
+                                </Tooltip>
+                              )}
+                              {i > 0 && (
+                                <Tooltip title="Delete Skill" placement="bottom">
+                                  <IconButton
+                                    onClick={() => {
+                                      onDlt(["experiences"], i);
+                                    }}
+                                  >
+                                    <Delete />
+                                  </IconButton>
+                                </Tooltip>
+                              )}
+                            </Grid>
+                          </Grid>
+                        </>
+                      );
+                      return expDiv;
+                    })}
+                  </CardContent>
+                </Card>
+              </>
+            )}
+          </form>
+        </Grid>
+      </Grid>
 
-      <Button className="pr" style={addResumeCont.submitBtn} variant="contained" color="success" onClick={()=>{onFormSubmit()}}>SAVE</Button>
+      <Button
+        className="pr"
+        style={addResumeCont.submitBtn}
+        variant="contained"
+        color="success"
+        onClick={() => {
+          onFormSubmit();
+        }}
+      >
+        SAVE
+      </Button>
     </div>
   );
 };

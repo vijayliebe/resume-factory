@@ -72,6 +72,14 @@ code {
   width: 100%;
 }
 
+.p-rel{
+  position: relative
+}
+
+.p-abs{
+  position: absolute
+}
+
 .addBtn {
   width: 7em;
   padding: 10px 10px;
@@ -131,6 +139,15 @@ code {
   left: 10px;
   font-weight: 400;
   font-size: 0.75em; 
+}
+
+.section:hover, .activeSection{
+  background: #fff;
+  font-weight: bold;
+}
+.snodiv{
+  font-weight: bold;
+  position: absolute;
 }
 /* input.formGroup{
   padding: 10px;
