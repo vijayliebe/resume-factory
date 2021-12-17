@@ -1,0 +1,13 @@
+.section:hover,
+.activeSection {
+  background: #fff;
+  font-weight: bold;
+}
+
+.snodiv {
+  font-weight: bold;
+  position: absolute;
+}
+
+
+

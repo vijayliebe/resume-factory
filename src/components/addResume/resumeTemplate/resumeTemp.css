@@ -1,0 +1,36 @@
+.skillRowMargin{
+    margin-bottom: 20px;
+}
+
+
+.resume-temp-grid{
+    cursor: pointer;
+    border: 1px solid #eee;
+    margin: 3.5em 1em 1em 3em;
+    box-shadow: 1px 1px 1px #ccc;
+    padding: 0.8em 0.8em 2em 0.8em !important;
+    text-align: center;
+    position: relative;
+}
+.resume-temp-grid.active{
+    /* background: #cfcdc7; */
+    background: #eee;
+}
+
+.resume-temp-title{
+    transform: translate(-50%, 0);
+    bottom: 8px;
+    position: absolute;
+    left: 50%;
+}
+
+.resume-temp-check-icon{
+    margin-top: 5px;
+    margin-bottom: -5px;
+}
+
+.previewBtn{
+    margin-bottom: 1em;
+    margin-right: 1em;
+}
+

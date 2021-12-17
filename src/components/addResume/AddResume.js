@@ -1,14 +1,30 @@
-import React, {useState} from "react";
-import { Alert, Button, TextField, Grid, Card, CardContent, CardActions, Slider, InputLabel, MenuItem, FormControl, Select, IconButton, Tooltip } from "@mui/material";
-import { Add, Delete } from '@mui/icons-material';
-import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import MobileDatePicker from '@mui/lab/MobileDatePicker';
-import {ResumeService} from '../services/ResumeService'
-
+import React, { useState } from "react";
+import "./addResume.css";
+import {
+  Alert,
+  Button,
+  TextField,
+  Grid,
+  Card,
+  CardContent,
+  CardActions,
+  Slider,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
+import { Add, Delete, CheckCircle } from "@mui/icons-material";
+import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DatePicker from "@mui/lab/DatePicker";
+import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
+import MobileDatePicker from "@mui/lab/MobileDatePicker";
+import { ResumeService } from "../../services/ResumeService";
+import { ResumeTemplate } from "./resumeTemplate/ResumeTemplate";
 export const AddResume = (props) => {
   const addResumeCont = {
     main: {
@@ -21,28 +37,28 @@ export const AddResume = (props) => {
       zIndex: "1",
       boxSizing: "border-box",
       padding: "1em",
-      overflow: "scroll"
+      overflow: "scroll",
     },
-    sectionsCont:{
+    sectionsCont: {
       background: "#eee",
       marginTop: "9px",
       paddingLeft: "0",
       boxShadow: "0 0 15px rgba(0,0,0,0.75)",
-      clipPath: "inset(0px -15px 0px 0px)"
+      clipPath: "inset(0px -15px 0px 0px)",
     },
-    sectionsRCont:{
-      padding: "0"
+    sectionsRCont: {
+      padding: "0",
     },
     sectionsContLiUl: {
       listStyleType: "none",
-      paddingLeft: "0"
+      paddingLeft: "0",
     },
-    sectionsContLi:{
+    sectionsContLi: {
       borderBottom: "1px solid #ccc",
       padding: "20px 30px",
       fontSize: "1.2em",
       textTransform: "uppercase",
-      cursor: "pointer"
+      cursor: "pointer",
     },
     form: {
       background: "#eee",
@@ -51,139 +67,182 @@ export const AddResume = (props) => {
       overflow: "scroll",
       marginTop: "8px",
       boxSizing: "border-box",
-      padding: "1em"
+      padding: "1em",
     },
     addDltBtn: {
-        paddingTop: "16px"
+      paddingTop: "16px",
     },
     skillRowMargin: {
-      marginBottom: "20px"
+      marginBottom: "20px",
     },
     expRowMargin: {
       paddingBottom: "2.5em",
       paddingTop: "2.5em",
       marginBottom: "1.3em",
       boxShadow: "0 0 10px rgba(0,0,0,0.75)",
-      clipPath: "inset(0px 0px -10px 0px)"
+      clipPath: "inset(0px 0px -10px 0px)",
     },
-    submitBtn:{
+    submitBtn: {
       marginTop: "15px",
       marginLeft: "2em",
-      float: "left"
-    }
+      float: "left",
+    },
+  };
+
+  const tabList = {
+    gen: "General",
+    ts: "Technical Skills",
+    ps: "Professional Skills",
+    exp: "Experiences",
+    temp: "Templates",
   };
   /* validation - start */
   const validateInput = (value, validators) => {
     let errors = [];
-    
-    validators.map((validator)=> {
+
+    validators.map((validator) => {
       let error;
-      switch(validator.name){
-        case "required" : error = ["", null, undefined].includes(value);              
+      switch (validator.name) {
+        case "required":
+          error = ["", null, undefined].includes(value);
           break;
 
-        case "url" :
-        case "email" : const re = new RegExp(validator.pattern, 'i'); error = !["", null, undefined].includes(value) ? !re.test(value)  : "";
+        case "url":
+        case "email":
+          const re = new RegExp(validator.pattern, "i");
+          error = !["", null, undefined].includes(value) ? !re.test(value) : "";
           break;
       }
-      if(error) errors.push(validator.errorMessage);
+      if (error) errors.push(validator.errorMessage);
     });
     return errors;
-  }
+  };
 
   const validators = {
-    required: {name: "required", errorMessage: "Required"},
-    email: {name: "email", pattern: "^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$", errorMessage: "Invalid email"},
-    url: {name: "url", pattern: "(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})", errorMessage: "Invalid Url"},
-  }
+    required: { name: "required", errorMessage: "Required" },
+    email: {
+      name: "email",
+      pattern:
+        '^(([^<>()[].,;:s@"]+(.[^<>()[].,;:s@"]+)*)|(".+"))@(([^<>()[].,;:s@"]+.)+[^<>()[].,;:s@"]{2,})$',
+      errorMessage: "Invalid email",
+    },
+    url: {
+      name: "url",
+      pattern:
+        "(https?://(?:www.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9].[^s]{2,}|www.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9].[^s]{2,}|https?://(?:www.|(?!www))[a-zA-Z0-9]+.[^s]{2,}|www.[a-zA-Z0-9]+.[^s]{2,})",
+      errorMessage: "Invalid Url",
+    },
+  };
   /* validation - end */
 
   /* form operations - start */
   const [activeSection, setActiveSection] = useState("gen");
   const date = new Date();
-  const d = date.getDate(), m = date.getMonth() + 1, y = date.getFullYear();
-  const dateString = '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
+  const d = date.getDate(),
+    m = date.getMonth() + 1,
+    y = date.getFullYear();
+  const dateString =
+    "" + y + "-" + (m <= 9 ? "0" + m : m) + "-" + (d <= 9 ? "0" + d : d);
   const minTechnicalSkills = 4;
   const minProfessionalSkills = 4;
-  const generalFieldObj = {value: "", dirty: false, validators: [], errors: []};
+  const generalFieldObj = {
+    value: "",
+    dirty: false,
+    validators: [],
+    errors: [],
+  };
   const getGeneralFieldObj = (validators, value) => {
-    let gfo = JSON.parse(JSON.stringify(generalFieldObj)); gfo.value=value; gfo.validators = validators; return gfo;
-  }
+    let gfo = JSON.parse(JSON.stringify(generalFieldObj));
+    gfo.value = value;
+    gfo.validators = validators;
+    return gfo;
+  };
 
   const fieldsmap = {
-    "experiences": {
-      "title": getGeneralFieldObj([validators.required]), 
-      "employmentType": getGeneralFieldObj([validators.required], 'fullTime'),
-      "fullTime": getGeneralFieldObj([validators.required]),
-      "company": getGeneralFieldObj([validators.required]), 
-      "location": getGeneralFieldObj([validators.required]),
-      "startDate": getGeneralFieldObj([validators.required], dateString),
-      "endDate": getGeneralFieldObj([validators.required], dateString)
-    }
-  }
+    experiences: {
+      title: getGeneralFieldObj([validators.required]),
+      employmentType: getGeneralFieldObj([validators.required], "fullTime"),
+      fullTime: getGeneralFieldObj([validators.required]),
+      company: getGeneralFieldObj([validators.required]),
+      location: getGeneralFieldObj([validators.required]),
+      startDate: getGeneralFieldObj([validators.required], dateString),
+      endDate: getGeneralFieldObj([validators.required], dateString),
+    },
+  };
 
-  const generalFields = { 
-    "name": getGeneralFieldObj([validators.required]),
-    "title": getGeneralFieldObj([validators.required]), 
-    "about": getGeneralFieldObj([validators.required]),
-    "phone": getGeneralFieldObj([validators.required]),
-    "email": getGeneralFieldObj([validators.required, validators.email]), 
-    "linkedIn": getGeneralFieldObj([validators.required, validators.url]), 
-    "location": getGeneralFieldObj([validators.required]),
-  }
+  const generalFields = {
+    name: getGeneralFieldObj([validators.required]),
+    title: getGeneralFieldObj([validators.required]),
+    about: getGeneralFieldObj([validators.required]),
+    phone: getGeneralFieldObj([validators.required]),
+    email: getGeneralFieldObj([validators.required, validators.email]),
+    linkedIn: getGeneralFieldObj([validators.required, validators.url]),
+    location: getGeneralFieldObj([validators.required]),
+  };
 
   const technicalSkillFields = {
-    "skills": new Array(minTechnicalSkills).fill(getGeneralFieldObj([validators.required])),
-    "ratings": new Array(minTechnicalSkills).fill(getGeneralFieldObj([validators.required], 1)) 
-  }
+    skills: new Array(minTechnicalSkills).fill(
+      getGeneralFieldObj([validators.required])
+    ),
+    ratings: new Array(minTechnicalSkills).fill(
+      getGeneralFieldObj([validators.required], 1)
+    ),
+  };
 
   const professionalSkillFields = {
-    "skills": new Array(minProfessionalSkills).fill(getGeneralFieldObj([validators.required])),
-    "ratings": new Array(minProfessionalSkills).fill(getGeneralFieldObj([validators.required], 1)) 
-  }
+    skills: new Array(minProfessionalSkills).fill(
+      getGeneralFieldObj([validators.required])
+    ),
+    ratings: new Array(minProfessionalSkills).fill(
+      getGeneralFieldObj([validators.required], 1)
+    ),
+  };
 
-  const experiencesFields = [fieldsmap.experiences]
+  const experiencesFields = [fieldsmap.experiences];
 
   const resumeFormFieldsObj = {
-    "general": generalFields,
-    "technicalSkills": technicalSkillFields,
-    "professionalSkills": professionalSkillFields,
-    "experiences": experiencesFields,
-    "educations": {},
-    "projects": {},
-    "certificates": {}
+    general: generalFields,
+    technicalSkills: technicalSkillFields,
+    professionalSkills: professionalSkillFields,
+    experiences: experiencesFields,
+    educations: {},
+    projects: {},
+    certificates: {},
   };
-  
+
   const [resumeFormFields, setResumeFormFields] = useState(resumeFormFieldsObj);
 
   const onFormFieldChange = (e, formNames) => {
     const [inputValue] = [e.target.value];
     let copyResumeFormFields = JSON.parse(JSON.stringify(resumeFormFields));
     let formField = copyResumeFormFields;
-    for(let fn of formNames){
-        formField = formField[fn]
+    for (let fn of formNames) {
+      formField = formField[fn];
     }
 
     const errors = validateInput(inputValue, formField.validators);
 
     formField.value = inputValue;
-    'dirty' in formField ? formField.dirty = true : delete formField.dirty;
+    "dirty" in formField ? (formField.dirty = true) : delete formField.dirty;
     formField.errors = errors;
 
     // console.log("onGeneralFieldChange :: formField ::", formField);
     // console.log("onGeneralFieldChange :: copyResumeFormFields ::", copyResumeFormFields);
 
     setResumeFormFields(copyResumeFormFields);
-  }
+  };
 
   const onAdd = (formNames, fieldsmapObj) => {
     let copyResumeFormFields = JSON.parse(JSON.stringify(resumeFormFields));
     let tsList = copyResumeFormFields;
-    for(let fn of formNames){
-      tsList = tsList[fn]
+    for (let fn of formNames) {
+      tsList = tsList[fn];
     }
 
-    if(formNames.includes("technicalSkills") || formNames.includes("professionalSkills") ){
+    if (
+      formNames.includes("technicalSkills") ||
+      formNames.includes("professionalSkills")
+    ) {
       tsList.skills.push(getGeneralFieldObj([validators.required]));
       tsList.ratings.push(getGeneralFieldObj([validators.required], 1));
     } else {
@@ -191,15 +250,18 @@ export const AddResume = (props) => {
     }
 
     setResumeFormFields(copyResumeFormFields);
-  }
+  };
   const onDlt = (formNames, index) => {
     let copyResumeFormFields = JSON.parse(JSON.stringify(resumeFormFields));
     let tsList = copyResumeFormFields;
-    for(let fn of formNames){
-      tsList = tsList[fn]
+    for (let fn of formNames) {
+      tsList = tsList[fn];
     }
 
-    if(formNames.includes("technicalSkills") || formNames.includes("professionalSkills") ){
+    if (
+      formNames.includes("technicalSkills") ||
+      formNames.includes("professionalSkills")
+    ) {
       tsList.skills.splice(index, 1);
       tsList.ratings.splice(index, 1);
     } else {
@@ -207,9 +269,7 @@ export const AddResume = (props) => {
     }
 
     setResumeFormFields(copyResumeFormFields);
-  }
-
-
+  };
 
   /* form operations - end */
 
@@ -226,14 +286,14 @@ export const AddResume = (props) => {
     resumePayload['experiences'] = experiences.map((exp)=> {return {"title": exp.title, "employmentType": exp.employmentType, "company": exp.company, "location": exp.location, "startDate": exp.startDate, "endDate": exp.endDate}});
  */
     return resumePayload;
-  }
+  };
   const onFormSubmit = () => {
     const payload = isFormValid();
     console.log("onSubmit :: payload ::", payload);
     console.log("ResumeService ::", ResumeService);
     // ResumeService.saveResume(payload);
     props.closeForm();
-  }
+  };
 
   return (
     <div style={addResumeCont.main}>
@@ -251,65 +311,27 @@ export const AddResume = (props) => {
       <Grid container spacing={2}>
         <Grid style={addResumeCont.sectionsCont} item xs={2} md={2} sx={2}>
           <ul style={addResumeCont.sectionsContLiUl}>
-          <li
-              style={addResumeCont.sectionsContLi}
-              className={'section ' + (activeSection === "gen" && 'activeSection')}
-              onClick={() => {
-                setActiveSection("gen");
-              }}
-            >
-              General
-            </li>
-
-            {/* <li
-              style={addResumeCont.sectionsContLi}
-              className={'section ' + (activeSection === "intro" && 'activeSection')}
-              onClick={() => {
-                setActiveSection("intro");
-              }}
-            >
-              Introduction
-            </li>
-            <li
-              style={addResumeCont.sectionsContLi}
-              className={'section ' + (activeSection === "cd" && 'activeSection')}
-              onClick={() => {
-                setActiveSection("cd");
-              }}
-            >
-              Contact Details
-            </li> */}
-            <li
-              style={addResumeCont.sectionsContLi}
-              className={'section ' + (activeSection === "ts" && 'activeSection')}
-              onClick={() => {
-                setActiveSection("ts");
-              }}
-            >
-              Technical Skills
-            </li>
-            <li
-              style={addResumeCont.sectionsContLi}
-              className={'section ' + (activeSection === "ps" && 'activeSection')}
-              onClick={() => {
-                setActiveSection("ps");
-              }}
-            >
-              Professional Skills
-            </li>
-            <li
-              style={addResumeCont.sectionsContLi}
-              className={'section ' + (activeSection === "exp" && 'activeSection')}
-              onClick={() => {
-                setActiveSection("exp");
-              }}
-            >
-              Experiences
-            </li>
+            {Object.keys(tabList).map((tab) => {
+              const tabHtml = (
+                <li
+                  key={tab}
+                  style={addResumeCont.sectionsContLi}
+                  className={
+                    "section " + (activeSection === tab && "activeSection")
+                  }
+                  onClick={() => {
+                    setActiveSection(tab);
+                  }}
+                >
+                  {tabList[tab]}
+                </li>
+              );
+              return tabHtml;
+            })}
           </ul>
         </Grid>
 
-        <Grid style={addResumeCont.sectionsRCont}  item xs={10} md={10} sx={10}>
+        <Grid style={addResumeCont.sectionsRCont} item xs={10} md={10} sx={10}>
           <form style={addResumeCont.form}>
             {(activeSection === "intro" || activeSection === "gen") && (
               <>
@@ -330,7 +352,7 @@ export const AddResume = (props) => {
                           onBlur={(e) => {
                             onFormFieldChange(e, ["general", "name"]);
                           }}
-                          error={resumeFormFields.general.name.errors.length}
+                          error={resumeFormFields.general.name.errors.length == 0 ? false : true}
                           helperText={resumeFormFields.general.name.errors.join(
                             "\n"
                           )}
@@ -349,7 +371,7 @@ export const AddResume = (props) => {
                           onBlur={(e) => {
                             onFormFieldChange(e, ["general", "title"]);
                           }}
-                          error={resumeFormFields.general.title.errors.length}
+                          error={resumeFormFields.general.title.errors.length == 0 ? false : true}
                           helperText={resumeFormFields.general.title.errors.join(
                             "\n"
                           )}
@@ -369,7 +391,7 @@ export const AddResume = (props) => {
                           onBlur={(e) => {
                             onFormFieldChange(e, ["general", "about"]);
                           }}
-                          error={resumeFormFields.general.about.errors.length}
+                          error={resumeFormFields.general.about.errors.length == 0 ? false : true}
                           helperText={resumeFormFields.general.about.errors.join(
                             "\n"
                           )}
@@ -401,7 +423,7 @@ export const AddResume = (props) => {
                           onBlur={(e) => {
                             onFormFieldChange(e, ["general", "phone"]);
                           }}
-                          error={resumeFormFields.general.phone.errors.length}
+                          error={resumeFormFields.general.phone.errors.length == 0 ? false : true}
                           helperText={resumeFormFields.general.phone.errors.join(
                             "\n"
                           )}
@@ -421,7 +443,7 @@ export const AddResume = (props) => {
                           onBlur={(e) => {
                             onFormFieldChange(e, ["general", "email"]);
                           }}
-                          error={resumeFormFields.general.email.errors.length}
+                          error={resumeFormFields.general.email.errors.length == 0 ? false : true}
                           helperText={resumeFormFields.general.email.errors.join(
                             "\n"
                           )}
@@ -442,7 +464,7 @@ export const AddResume = (props) => {
                             onFormFieldChange(e, ["general", "linkedIn"]);
                           }}
                           error={
-                            resumeFormFields.general.linkedIn.errors.length
+                            resumeFormFields.general.linkedIn.errors.length == 0 ? false : true
                           }
                           helperText={resumeFormFields.general.linkedIn.errors.join(
                             "\n"
@@ -464,7 +486,7 @@ export const AddResume = (props) => {
                             onFormFieldChange(e, ["general", "location"]);
                           }}
                           error={
-                            resumeFormFields.general.location.errors.length
+                            resumeFormFields.general.location.errors.length == 0 ? false : true
                           }
                           helperText={resumeFormFields.general.location.errors.join(
                             "\n"
@@ -513,7 +535,7 @@ export const AddResume = (props) => {
                                   i,
                                 ]);
                               }}
-                              error={ts.errors.length}
+                              error={ts.errors.length == 0 ? false : true}
                               helperText={ts.errors.join("\n")}
                               variant="outlined"
                               fullWidth
@@ -522,7 +544,7 @@ export const AddResume = (props) => {
                           <Grid item xs={5} md={5} sx={5}>
                             <div className="customInputBorder">
                               <div className="customInputBorderLabel">
-                                Rating<bold>({tsr.value})</bold>
+                                Rating({tsr.value})
                               </div>
                               <Slider
                                 aria-label="Rating"
@@ -622,7 +644,7 @@ export const AddResume = (props) => {
                                   i,
                                 ]);
                               }}
-                              error={ps.errors.length}
+                              error={ps.errors.length == 0 ? false : true}
                               helperText={ps.errors.join("\n")}
                               variant="outlined"
                               fullWidth
@@ -704,7 +726,9 @@ export const AddResume = (props) => {
                     {resumeFormFields.experiences.map((experience, i) => {
                       const expDiv = (
                         <>
-                          <div className="snodiv">{'#EXPERIENCE : ' + (i+1)}</div>
+                          <div className="snodiv">
+                            {"#EXPERIENCE : " + (i + 1)}
+                          </div>
                           <Grid
                             style={addResumeCont.expRowMargin}
                             container
@@ -732,7 +756,7 @@ export const AddResume = (props) => {
                                     "title",
                                   ]);
                                 }}
-                                error={experience.title.errors.length}
+                                error={experience.title.errors.length == 0 ? false : true}
                                 helperText={experience.title.errors.join("\n")}
                               />
                             </Grid>
@@ -755,8 +779,12 @@ export const AddResume = (props) => {
                                     ]);
                                   }}
                                 >
-                                  <MenuItem value="fullTime">Full-time</MenuItem>
-                                  <MenuItem value="partTime">Part-time</MenuItem>
+                                  <MenuItem value="fullTime">
+                                    Full-time
+                                  </MenuItem>
+                                  <MenuItem value="partTime">
+                                    Part-time
+                                  </MenuItem>
                                   <MenuItem value="selfEmployed">
                                     Self-employed
                                   </MenuItem>
@@ -786,8 +814,10 @@ export const AddResume = (props) => {
                                     "company",
                                   ]);
                                 }}
-                                error={experience.company.errors.length}
-                                helperText={experience.company.errors.join("\n")}
+                                error={experience.company.errors.length == 0 ? false : true}
+                                helperText={experience.company.errors.join(
+                                  "\n"
+                                )}
                               />
                             </Grid>
 
@@ -813,8 +843,10 @@ export const AddResume = (props) => {
                                     "location",
                                   ]);
                                 }}
-                                error={experience.location.errors.length}
-                                helperText={experience.location.errors.join("\n")}
+                                error={experience.location.errors.length == 0 ? false : true}
+                                helperText={experience.location.errors.join(
+                                  "\n"
+                                )}
                               />
                             </Grid>
 
@@ -842,7 +874,7 @@ export const AddResume = (props) => {
                                     "startDate",
                                   ]);
                                 }}
-                                error={experience.startDate.errors.length}
+                                error={experience.startDate.errors.length == 0 ? false : true}
                                 helperText={experience.startDate.errors.join(
                                   "\n"
                                 )}
@@ -873,8 +905,10 @@ export const AddResume = (props) => {
                                     "endDate",
                                   ]);
                                 }}
-                                error={experience.endDate.errors.length}
-                                helperText={experience.endDate.errors.join("\n")}
+                                error={experience.endDate.errors.length == 0 ? false : true}
+                                helperText={experience.endDate.errors.join(
+                                  "\n"
+                                )}
                               />
 
                               {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -888,8 +922,12 @@ export const AddResume = (props) => {
                             </Grid>
 
                             <Grid item xs={1} md={1} sx={1}>
-                              {i === resumeFormFields.experiences.length - 1 && (
-                                <Tooltip title="Add New Skill" placement="bottom">
+                              {i ===
+                                resumeFormFields.experiences.length - 1 && (
+                                <Tooltip
+                                  title="Add New Skill"
+                                  placement="bottom"
+                                >
                                   <IconButton
                                     onClick={() => {
                                       onAdd(["experiences"], "experiences");
@@ -900,7 +938,10 @@ export const AddResume = (props) => {
                                 </Tooltip>
                               )}
                               {i > 0 && (
-                                <Tooltip title="Delete Skill" placement="bottom">
+                                <Tooltip
+                                  title="Delete Skill"
+                                  placement="bottom"
+                                >
                                   <IconButton
                                     onClick={() => {
                                       onDlt(["experiences"], i);
@@ -920,6 +961,8 @@ export const AddResume = (props) => {
                 </Card>
               </>
             )}
+
+            {activeSection === "temp" && <ResumeTemplate />}
           </form>
         </Grid>
       </Grid>
@@ -927,6 +970,7 @@ export const AddResume = (props) => {
       <Button
         className="pr"
         style={addResumeCont.submitBtn}
+        size="large"
         variant="contained"
         color="success"
         onClick={() => {

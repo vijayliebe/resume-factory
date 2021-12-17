@@ -8,7 +8,8 @@ export const ListResume = (props) => {
             fontWeight: "bold"
         },
         listRow: {
-           
+           borderBottom: "1px solid #ccc",
+           marginBottom: "12px"
         },
         listCol: {
             width: "calc(100% /3)",
@@ -39,8 +40,7 @@ export const ListResume = (props) => {
             </div>
             <hr/>
             {props.resumes.map((r, i)=>{
-                const resumeRowDiv = <>
-                                        <div style={styles.listRow}>
+                return <div key={'resume'+i} style={styles.listRow}>
                                             <div className="fl" style={styles.listCol}>{r.name}</div>
                                             <div className="fl" style={styles.listCol}>{r.title}</div>
                                             <div className="fl" style={styles.listCol}>
@@ -67,12 +67,7 @@ export const ListResume = (props) => {
                                             
                                             </div>
                                             <div className="clear"></div>
-                                        </div>
-                                        <hr/>
-                                    </>
-                                    
-
-                return resumeRowDiv;
+                       </div>                  
             })}
         </div>
     )

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {AddResume} from '../components/AddResume';
+import {AddResume} from '../components/addResume/AddResume';
 import {ListResume} from '../components/ListResume';
 import Button from '@mui/material/Button';
 import { Add, Delete } from '@mui/icons-material';
