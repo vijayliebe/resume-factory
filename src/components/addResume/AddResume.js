@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./addResume.css";
 import {
   Alert,
@@ -28,6 +28,11 @@ import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import MobileDatePicker from "@mui/lab/MobileDatePicker";
 import { ResumeService } from "../../services/ResumeService";
 import { ResumeTemplate } from "./resumeTemplate/ResumeTemplate";
+import { FormService } from "../../services/FormService";
+import { EduTemp } from "./EduTemp";
+import { ProjTemp } from "./ProjTemp";
+import { LangTemp } from "./LangTemp";
+import { CertTemp } from "./CertTemp";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
@@ -90,11 +95,16 @@ export const AddResume = (props) => {
 
   const tabList = {
     gen: "General",
+    edu: "Education",
+    exp: "Experiences",
+    proj: "Projects",
     ts: "Technical Skills",
     ps: "Professional Skills",
-    exp: "Experiences",
+    lang: "Languages",
+    cert: "Certifications & Rewards",
     temp: "Templates",
   };
+  const tabs = Object.keys(tabList);
   /* validation - start */
   const validateInput = (value, validators) => {
     let errors = [];
@@ -136,14 +146,20 @@ export const AddResume = (props) => {
 
   /* form operations - start */
   const [activeSection, setActiveSection] = useState("gen");
+  const minTechnicalSkills = 4;
+  const minProfessionalSkills = 4;
+
+
+
   const date = new Date();
   const d = date.getDate(),
     m = date.getMonth() + 1,
     y = date.getFullYear();
   const dateString =
     "" + y + "-" + (m <= 9 ? "0" + m : m) + "-" + (d <= 9 ? "0" + d : d);
-  const minTechnicalSkills = 4;
-  const minProfessionalSkills = 4;
+
+
+
   const generalFieldObj = {
     value: "",
     dirty: false,
@@ -287,13 +303,20 @@ export const AddResume = (props) => {
     return resumePayload;
   };
   const onFormSubmit = () => {
-    const payload = isFormValid();
-    console.log("onSubmit :: payload ::", payload);
-    console.log("ResumeService ::", ResumeService);
+    // const payload = isFormValid();
+    // console.log("onSubmit :: payload ::", payload);
+    // console.log("ResumeService ::", ResumeService);
     // ResumeService.saveResume(payload);
-    props.closeForm();
+    if(activeSection === tabs[tabs.length - 1]){
+      // save
+      props.closeForm();
+    } else {
+      setActiveSection(tabs[tabs.indexOf(activeSection) + 1]);
+    }
   };
 
+  useEffect(()=> {
+  });
   return (
     <Dialog
       fullScreen
@@ -1026,6 +1049,10 @@ export const AddResume = (props) => {
               )}
 
               {activeSection === "temp" && <ResumeTemplate />}
+              {activeSection === "edu" && <EduTemp />}
+              {activeSection === "proj" && <ProjTemp />}
+              {/* {activeSection === "lang" && <LangTemp resumeFormFields={resumeFormFields} onFormFieldChange={onFormFieldChange} onAdd={onAdd} onDlt={onDlt} minTechnicalSkills={minTechnicalSkills} />} */}
+              {activeSection === "cert" && <CertTemp />}
             </form>
           </Grid>
         </Grid>
@@ -1040,7 +1067,7 @@ export const AddResume = (props) => {
             onFormSubmit();
           }}
         >
-          SAVE
+          {activeSection === tabs[tabs.length - 1] ? "SAVE" : "NEXT" } 
         </Button>
       </div>
     </Dialog>
