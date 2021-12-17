@@ -1,14 +1,13 @@
-.skillRowMargin{
+.contRowMargin{
     margin-bottom: 20px;
 }
-
 
 .resume-temp-grid{
     cursor: pointer;
     border: 1px solid #eee;
-    margin: 3.5em 1em 1em 3em;
+    margin: 3.5em 1em 1em 3em !important;
     box-shadow: 1px 1px 1px #ccc;
-    padding: 0.8em 0.8em 2em 0.8em !important;
+    padding: 0.8em 0.8em 3.5em 0.8em !important;
     text-align: center;
     position: relative;
 }
@@ -25,12 +24,14 @@
 }
 
 .resume-temp-check-icon{
-    margin-top: 5px;
-    margin-bottom: -5px;
+    transform: translate(-50%, 0);
+    bottom: 23px;
+    position: absolute;
+    left: 50%;
 }
 
 .previewBtn{
-    margin-bottom: 1em;
-    margin-right: 1em;
+    margin-bottom: 1em !important;
+    margin-right: 1em !important;
 }
 

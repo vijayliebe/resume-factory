@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./resumeTemp.css"
+import "./resumeTemp.css";
 import {
   Alert,
   Dialog,
@@ -71,7 +71,7 @@ export const ResumeTemplate = (props) => {
       <h2 className="title2">Templates</h2>
       <Card>
         <CardContent className="p-rel">
-          <Grid className="skillRowMargin" container spacing={2}>
+          <Grid className="contRowMargin" container spacing={2}>
             {resumeTemplates.map((rt, i) => {
               return (
                 <Grid
