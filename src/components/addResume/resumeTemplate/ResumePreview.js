@@ -5,13 +5,13 @@ import { ModernTemp } from "./allTemplates/modern/ModernTemp";
 export const ResumePreview = (props) => {
 
     return (
-        <>
+        <div className="previewResumeCont">
             <h1>Resume Preview</h1>
            {/* <div>{JSON.stringify(props.selectedResumeTemp)}</div>
            <div>{JSON.stringify(props.selectedResumeTemp.name)}</div> */}
 
            {props.selectedResumeTemp.name == "Professional" && <ProfessionalTemp/>}
            {props.selectedResumeTemp.name === "Modern" && <ModernTemp/>}
-        </>
+        </div>
     );
 }

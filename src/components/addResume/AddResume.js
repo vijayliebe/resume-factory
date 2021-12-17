@@ -29,7 +29,7 @@ import MobileDatePicker from "@mui/lab/MobileDatePicker";
 import { ResumeService } from "../../services/ResumeService";
 import { ResumeTemplate } from "./resumeTemplate/ResumeTemplate";
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
+  return <Slide direction="down" ref={ref} {...props} />;
 });
 export const AddResume = (props) => {
   const addResumeCont = {

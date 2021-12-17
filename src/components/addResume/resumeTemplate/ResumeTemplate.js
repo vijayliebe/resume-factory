@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 
 import { Add, Delete, CheckCircle } from "@mui/icons-material";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
 import { ResumePreview } from "./ResumePreview";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -75,7 +75,7 @@ export const ResumeTemplate = (props) => {
             {resumeTemplates.map((rt, i) => {
               return (
                 <Grid
-                  key={"rt"+i}
+                  key={"rt" + i}
                   onClick={() => {
                     selectResumeTemp(i);
                   }}
@@ -86,7 +86,7 @@ export const ResumeTemplate = (props) => {
                   sx={2}
                 >
                   <img
-                    className="img-full"
+                    className=""
                     src={"images/" + rt.image}
                     alt={rt.name}
                     loading="lazy"
@@ -122,14 +122,15 @@ export const ResumeTemplate = (props) => {
         onClose={handleClose}
         TransitionComponent={Transition}
       >
-          <IconButton
-              edge="start"
-              color="inherit"
-              onClick={handleClose}
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
+        <IconButton
+          edge="start"
+          color="inherit"
+          onClick={handleClose}
+          aria-label="close"
+          className="closeBtn"
+        >
+          <CloseIcon />
+        </IconButton>
         <ResumePreview selectedResumeTemp={selectedResumeTemp} />
       </Dialog>
     </>
