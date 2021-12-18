@@ -55,7 +55,7 @@ const generalFieldObj = {
 };
 const getGeneralFieldObj = (validators, value) => {
   let gfo = JSON.parse(JSON.stringify(generalFieldObj));
-  gfo.value = value === "dateString" ? dateString : value;
+  gfo.value = value ?  value === "dateString" ? dateString : value : "";
   gfo.validators = validators;
   return gfo;
 };
@@ -80,9 +80,12 @@ const onFormFieldChange = (e, formNames) => {
   setResumeFormFields(copyResumeFormFields);
 };
 
-const setState = (rff, srff) => {
+const init = (rff, srff) => {
   resumeFormFields = rff;
   setResumeFormFields = srff;
+}
+const setState = (data) => {
+  setResumeFormFields(data);
 }
 
 const getState = () => {
@@ -93,6 +96,7 @@ const getState = () => {
 const isFormValid = () => {};
 
 export const FormService = {
+  init,
   isFormValid,
   getGeneralFieldObj,
   onFormFieldChange,

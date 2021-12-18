@@ -163,11 +163,12 @@ export const AddResume = (props) => {
     educations: {},
     projects: {},
     certificates: {},
+    languages: {}
   };
 
   const [resumeFormFields, setResumeFormFields] = useState(resumeFormFieldsObj);
-  addResumeForm.setState(resumeFormFields, setResumeFormFields);
-  console.log("resumeFormFields ::", resumeFormFields);
+  addResumeForm.init(resumeFormFields, setResumeFormFields);
+  // console.log("resumeFormFields ::", resumeFormFields);
 
   /* form operations - end */
 
@@ -184,8 +185,11 @@ export const AddResume = (props) => {
     ) {
       tsList.skills.push(addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]));
       tsList.ratings.push(addResumeForm.getGeneralFieldObj([addResumeForm.validators.required], 1));
-    } else {
-      tsList.push(fieldsmap[fieldsmapObj]);
+    } else if(formNames.includes("languages")){
+      tsList.lang.push(addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]));
+      tsList.ratings.push(addResumeForm.getGeneralFieldObj([addResumeForm.validators.required], 1));
+    }else {
+      tsList.push(fieldsmapObj);
     }
 
     setResumeFormFields(copyResumeFormFields);
@@ -940,7 +944,7 @@ export const AddResume = (props) => {
                                   >
                                     <IconButton
                                       onClick={() => {
-                                        onAdd(["experiences"], "experiences");
+                                        onAdd(["experiences"], fieldsmap["experiences"]);
                                       }}
                                     >
                                       <AddCircleOutlineOutlinedIcon />
@@ -975,7 +979,7 @@ export const AddResume = (props) => {
               {activeSection === "temp" && <ResumeTemplate />}
               {activeSection === "edu" && <EduTemp />}
               {activeSection === "proj" && <ProjTemp />}
-              {activeSection === "lang" && <LangTemp />}
+              {activeSection === "lang" && <LangTemp addResumeForm={addResumeForm} resumeFormFields={resumeFormFields} setResumeFormFields={setResumeFormFields} onAdd={onAdd} onDlt={onDlt} />}
               {activeSection === "cert" && <CertTemp />}
             </form>
           </Grid>
