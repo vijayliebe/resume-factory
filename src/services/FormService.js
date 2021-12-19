@@ -3,7 +3,7 @@ let resumeFormFields, setResumeFormFields;
 const validateInput = (value, validators) => {
   let errors = [];
 
-  validators.map((validator) => {
+  validators?.map((validator) => {
     let error;
     switch (validator.name) {
       case "required":

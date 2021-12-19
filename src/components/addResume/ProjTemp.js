@@ -27,13 +27,18 @@ export const ProjTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
     company: addResumeForm.getGeneralFieldObj([
       addResumeForm.validators.required,
     ]),
-    url: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required, addResumeForm.validators.url]),
-    startDate: addResumeForm.getGeneralFieldObj([
+    url: addResumeForm.getGeneralFieldObj([
       addResumeForm.validators.required,
-    ], "dateString"),
-    endDate: addResumeForm.getGeneralFieldObj([
-      addResumeForm.validators.required,
-    ], "dateString"),
+      addResumeForm.validators.url,
+    ]),
+    startDate: addResumeForm.getGeneralFieldObj(
+      [addResumeForm.validators.required],
+      "dateString"
+    ),
+    endDate: addResumeForm.getGeneralFieldObj(
+      [addResumeForm.validators.required],
+      "dateString"
+    ),
     desc: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
     tech: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
     roles: addResumeForm.getGeneralFieldObj([
@@ -51,17 +56,14 @@ export const ProjTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
 
   return (
     <div>
-      <h2>Projects</h2>
-      <Card>
-        <CardContent>
-          {resumeFormFields?.projects?.map((p, i) => {
-            const projDiv = (
-              <Grid
-                key={"proj_" + i}
-                className="contRowMargin"
-                container
-                spacing={2}
-              >
+      <h2 className="title2">Projects</h2>
+
+      {resumeFormFields?.projects?.map((p, i) => {
+        const projDiv = (
+          <Card key={"proj_" + i} className="card-container">
+            <CardContent>
+              <div className="snodiv">{"#PROJECT : " + (i + 1)}</div>
+              <Grid className="" container spacing={2}>
                 <Grid item xs={3} md={3} sx={3}>
                   <TextField
                     id={"name_" + (i + 1)}
@@ -148,7 +150,7 @@ export const ProjTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
                   <TextField
                     id={"endDate_" + (i + 1)}
                     label={"End Date "}
-                    type="data"
+                    type="date"
                     sx={{ width: "100%" }}
                     value={p.endDate.value}
                     onChange={(e) => {
@@ -227,7 +229,7 @@ export const ProjTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
                   />
                 </Grid>
 
-                <Grid item xs={6} md={6} sx={6}>
+                <Grid item xs={12} md={12} sx={12}>
                   <TextField
                     id={"desc_" + (i + 1)}
                     label={"Description "}
@@ -256,14 +258,14 @@ export const ProjTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
                   />
                 </Grid>
 
-                <Grid item xs={6} md={6} sx={6}>
+                <Grid item xs={11} md={11} sx={11}>
                   <TextField
                     id={"roles_" + (i + 1)}
                     label={"Roles & Responsibilities"}
                     type="text"
                     multiline
                     rows={3}
-                    placeholder="a. Requirement Gathering &#13;&#10;b. Front-end Development &#13;&#10;c. API development" 
+                    placeholder="a. Requirement Gathering &#13;&#10;b. Front-end Development &#13;&#10;c. API development"
                     value={p.roles.value}
                     onChange={(e) => {
                       addResumeForm.onFormFieldChange(e, [
@@ -286,13 +288,36 @@ export const ProjTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
                   />
                 </Grid>
 
-
+                <Grid item xs={1} md={1} sx={1}>
+                  {i === resumeFormFields.projects.length - 1 && (
+                    <Tooltip title="Add New Project" placement="bottom">
+                      <IconButton
+                        onClick={() => {
+                          onAdd(["projects"], projFields);
+                        }}
+                      >
+                        <AddCircleOutlineOutlinedIcon />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                  {resumeFormFields?.projects?.length > minProject && (
+                    <Tooltip title="Delete Project" placement="bottom">
+                      <IconButton
+                        onClick={() => {
+                          onDlt(["projects"], i);
+                        }}
+                      >
+                        <Delete />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                </Grid>
               </Grid>
-            );
-            return projDiv;
-          })}
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
+        );
+        return projDiv;
+      })}
     </div>
   );
 };

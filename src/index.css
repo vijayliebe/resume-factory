@@ -129,6 +129,7 @@ code {
 .title2 {
   color: #242222;
   font-family: sans-serif;
+  text-transform: uppercase;
 }
 
 .customInputBorder {
@@ -147,6 +148,11 @@ code {
   left: 10px;
   font-weight: 400;
   font-size: 0.75em; 
+}
+
+.card-container{
+  padding-top: 15px;
+  margin-bottom: 15px;
 }
 
 

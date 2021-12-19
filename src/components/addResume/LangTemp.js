@@ -45,7 +45,7 @@ export const LangTemp = ({
 
   return (
     <div>
-      <h2>Languages</h2>
+      <h2 className="title2">Languages</h2>
       <Card>
         <CardContent>
           {resumeFormFields?.languages?.lang?.map((ts, i) => {
@@ -119,7 +119,7 @@ export const LangTemp = ({
                         </IconButton>
                       </Tooltip>
                     )}
-                    {i >= minLangs && (
+                    {resumeFormFields?.languages?.lang.length > minLangs && (
                       <Tooltip title="Delete Language" placement="bottom">
                         <IconButton
                           onClick={() => {

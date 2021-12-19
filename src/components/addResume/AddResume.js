@@ -42,7 +42,7 @@ export const AddResume = (props) => {
     main: {
       background: "#fff",
       boxSizing: "border-box",
-      padding: "1em"
+      padding: "1em",
     },
     sectionsCont: {
       background: "#eee",
@@ -108,31 +108,66 @@ export const AddResume = (props) => {
   const tabs = Object.keys(tabList);
   const [activeSection, setActiveSection] = useState("gen");
   const minTechnicalSkills = 4;
-  const minProfessionalSkills = 4;
+  const minProfessionalSkills = 2;
+  const minExp = 1;
 
   /* form operations - start */
   const addResumeForm = FormService;
-  
+
   const fieldsmap = {
     experiences: {
-      title: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
-      employmentType: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required], "fullTime"),
-      fullTime: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
-      company: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
-      location: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
-      startDate: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required], "dateString"),
-      endDate: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required], "dateString"),
+      title: addResumeForm.getGeneralFieldObj([
+        addResumeForm.validators.required,
+      ]),
+      employmentType: addResumeForm.getGeneralFieldObj(
+        [addResumeForm.validators.required],
+        "fullTime"
+      ),
+      fullTime: addResumeForm.getGeneralFieldObj([
+        addResumeForm.validators.required,
+      ]),
+      company: addResumeForm.getGeneralFieldObj([
+        addResumeForm.validators.required,
+      ]),
+      location: addResumeForm.getGeneralFieldObj([
+        addResumeForm.validators.required,
+      ]),
+      startDate: addResumeForm.getGeneralFieldObj(
+        [addResumeForm.validators.required],
+        "dateString"
+      ),
+      endDate: addResumeForm.getGeneralFieldObj(
+        [addResumeForm.validators.required],
+        "dateString"
+      ),
+      roles: addResumeForm.getGeneralFieldObj([
+        addResumeForm.validators.required,
+      ]),
     },
   };
 
   const generalFields = {
     name: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
-    title: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
-    about: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
-    phone: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
-    email: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required, addResumeForm.validators.email]),
-    linkedIn: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required, addResumeForm.validators.url]),
-    location: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
+    title: addResumeForm.getGeneralFieldObj([
+      addResumeForm.validators.required,
+    ]),
+    about: addResumeForm.getGeneralFieldObj([
+      addResumeForm.validators.required,
+    ]),
+    phone: addResumeForm.getGeneralFieldObj([
+      addResumeForm.validators.required,
+    ]),
+    email: addResumeForm.getGeneralFieldObj([
+      addResumeForm.validators.required,
+      addResumeForm.validators.email,
+    ]),
+    linkedIn: addResumeForm.getGeneralFieldObj([
+      addResumeForm.validators.required,
+      addResumeForm.validators.url,
+    ]),
+    location: addResumeForm.getGeneralFieldObj([
+      addResumeForm.validators.required,
+    ]),
   };
 
   const technicalSkillFields = {
@@ -163,7 +198,7 @@ export const AddResume = (props) => {
     educations: [],
     projects: [],
     certificates: [],
-    languages: {}
+    languages: {},
   };
 
   const [resumeFormFields, setResumeFormFields] = useState(resumeFormFieldsObj);
@@ -183,12 +218,20 @@ export const AddResume = (props) => {
       formNames.includes("technicalSkills") ||
       formNames.includes("professionalSkills")
     ) {
-      tsList.skills.push(addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]));
-      tsList.ratings.push(addResumeForm.getGeneralFieldObj([addResumeForm.validators.required], 1));
-    } else if(formNames.includes("languages")){
-      tsList.lang.push(addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]));
-      tsList.ratings.push(addResumeForm.getGeneralFieldObj([addResumeForm.validators.required], 1));
-    }else {
+      tsList.skills.push(
+        addResumeForm.getGeneralFieldObj([addResumeForm.validators.required])
+      );
+      tsList.ratings.push(
+        addResumeForm.getGeneralFieldObj([addResumeForm.validators.required], 1)
+      );
+    } else if (formNames.includes("languages")) {
+      tsList.lang.push(
+        addResumeForm.getGeneralFieldObj([addResumeForm.validators.required])
+      );
+      tsList.ratings.push(
+        addResumeForm.getGeneralFieldObj([addResumeForm.validators.required], 1)
+      );
+    } else {
       tsList.push(fieldsmapObj);
     }
 
@@ -207,6 +250,9 @@ export const AddResume = (props) => {
       formNames.includes("professionalSkills")
     ) {
       tsList.skills.splice(index, 1);
+      tsList.ratings.splice(index, 1);
+    } else if (formNames.includes("languages")) {
+      tsList.lang.splice(index, 1);
       tsList.ratings.splice(index, 1);
     } else {
       tsList.splice(index, 1);
@@ -234,7 +280,7 @@ export const AddResume = (props) => {
     // console.log("onSubmit :: payload ::", payload);
     // console.log("ResumeService ::", ResumeService);
     // ResumeService.saveResume(payload);
-    if(activeSection === tabs[tabs.length - 1]){
+    if (activeSection === tabs[tabs.length - 1]) {
       // save
       props.closeForm();
     } else {
@@ -242,7 +288,7 @@ export const AddResume = (props) => {
     }
   };
 
-  useEffect(()=> {
+  useEffect(() => {
     console.log("resumeFormFields :: useEffect ::");
   }, []);
   return (
@@ -310,10 +356,16 @@ export const AddResume = (props) => {
                             variant="outlined"
                             value={resumeFormFields.general.name.value}
                             onChange={(e) => {
-                              addResumeForm.onFormFieldChange(e, ["general", "name"]);
+                              addResumeForm.onFormFieldChange(e, [
+                                "general",
+                                "name",
+                              ]);
                             }}
                             onBlur={(e) => {
-                              addResumeForm.onFormFieldChange(e, ["general", "name"]);
+                              addResumeForm.onFormFieldChange(e, [
+                                "general",
+                                "name",
+                              ]);
                             }}
                             error={
                               resumeFormFields.general.name.errors.length == 0
@@ -333,10 +385,16 @@ export const AddResume = (props) => {
                             variant="outlined"
                             value={resumeFormFields.general.title.value}
                             onChange={(e) => {
-                              addResumeForm.onFormFieldChange(e, ["general", "title"]);
+                              addResumeForm.onFormFieldChange(e, [
+                                "general",
+                                "title",
+                              ]);
                             }}
                             onBlur={(e) => {
-                              addResumeForm.onFormFieldChange(e, ["general", "title"]);
+                              addResumeForm.onFormFieldChange(e, [
+                                "general",
+                                "title",
+                              ]);
                             }}
                             error={
                               resumeFormFields.general.title.errors.length == 0
@@ -357,10 +415,16 @@ export const AddResume = (props) => {
                             rows={2}
                             value={resumeFormFields.general.about.value}
                             onChange={(e) => {
-                              addResumeForm.onFormFieldChange(e, ["general", "about"]);
+                              addResumeForm.onFormFieldChange(e, [
+                                "general",
+                                "about",
+                              ]);
                             }}
                             onBlur={(e) => {
-                              addResumeForm.onFormFieldChange(e, ["general", "about"]);
+                              addResumeForm.onFormFieldChange(e, [
+                                "general",
+                                "about",
+                              ]);
                             }}
                             error={
                               resumeFormFields.general.about.errors.length == 0
@@ -393,10 +457,16 @@ export const AddResume = (props) => {
                             variant="outlined"
                             value={resumeFormFields.general.phone.value}
                             onChange={(e) => {
-                              addResumeForm.onFormFieldChange(e, ["general", "phone"]);
+                              addResumeForm.onFormFieldChange(e, [
+                                "general",
+                                "phone",
+                              ]);
                             }}
                             onBlur={(e) => {
-                              addResumeForm.onFormFieldChange(e, ["general", "phone"]);
+                              addResumeForm.onFormFieldChange(e, [
+                                "general",
+                                "phone",
+                              ]);
                             }}
                             error={
                               resumeFormFields.general.phone.errors.length == 0
@@ -417,10 +487,16 @@ export const AddResume = (props) => {
                             variant="outlined"
                             value={resumeFormFields.general.email.value}
                             onChange={(e) => {
-                              addResumeForm.onFormFieldChange(e, ["general", "email"]);
+                              addResumeForm.onFormFieldChange(e, [
+                                "general",
+                                "email",
+                              ]);
                             }}
                             onBlur={(e) => {
-                              addResumeForm.onFormFieldChange(e, ["general", "email"]);
+                              addResumeForm.onFormFieldChange(e, [
+                                "general",
+                                "email",
+                              ]);
                             }}
                             error={
                               resumeFormFields.general.email.errors.length == 0
@@ -441,10 +517,16 @@ export const AddResume = (props) => {
                             variant="outlined"
                             value={resumeFormFields.general.linkedIn.value}
                             onChange={(e) => {
-                              addResumeForm.onFormFieldChange(e, ["general", "linkedIn"]);
+                              addResumeForm.onFormFieldChange(e, [
+                                "general",
+                                "linkedIn",
+                              ]);
                             }}
                             onBlur={(e) => {
-                              addResumeForm.onFormFieldChange(e, ["general", "linkedIn"]);
+                              addResumeForm.onFormFieldChange(e, [
+                                "general",
+                                "linkedIn",
+                              ]);
                             }}
                             error={
                               resumeFormFields.general.linkedIn.errors.length ==
@@ -466,10 +548,16 @@ export const AddResume = (props) => {
                             variant="outlined"
                             value={resumeFormFields.general.location.value}
                             onChange={(e) => {
-                              addResumeForm.onFormFieldChange(e, ["general", "location"]);
+                              addResumeForm.onFormFieldChange(e, [
+                                "general",
+                                "location",
+                              ]);
                             }}
                             onBlur={(e) => {
-                              addResumeForm.onFormFieldChange(e, ["general", "location"]);
+                              addResumeForm.onFormFieldChange(e, [
+                                "general",
+                                "location",
+                              ]);
                             }}
                             error={
                               resumeFormFields.general.location.errors.length ==
@@ -572,7 +660,8 @@ export const AddResume = (props) => {
                                     </IconButton>
                                   </Tooltip>
                                 )}
-                                {i >= minTechnicalSkills && (
+                                {resumeFormFields.technicalSkills.skills
+                                  .length > minTechnicalSkills && (
                                   <Tooltip
                                     title="Delete Skill"
                                     placement="bottom"
@@ -683,7 +772,8 @@ export const AddResume = (props) => {
                                       </IconButton>
                                     </Tooltip>
                                   )}
-                                  {i >= minProfessionalSkills && (
+                                  {resumeFormFields.professionalSkills.skills
+                                    .length > minProfessionalSkills && (
                                     <Tooltip
                                       title="Delete Skill"
                                       placement="bottom"
@@ -713,20 +803,17 @@ export const AddResume = (props) => {
               {activeSection === "exp" && (
                 <>
                   <h2 className="title2">Experience </h2>
-                  <Card>
-                    <CardContent className="p-rel">
-                      {resumeFormFields.experiences.map((experience, i) => {
-                        const expDiv = (
-                          <div key={'exp'+i}>
+
+                  {resumeFormFields.experiences.map((experience, i) => {
+                    const expDiv = (
+                      <Card key={"exp_" + i} className="card-container">
+                        <CardContent>
+                          <div>
                             <div className="snodiv">
                               {"#EXPERIENCE : " + (i + 1)}
                             </div>
-                            <Grid
-                              style={addResumeCont.expRowMargin}
-                              container
-                              spacing={2}
-                            >
-                              <Grid item xs={3} md={3} sx={3}>
+                            <Grid container spacing={2}>
+                              <Grid item xs={4} md={4} sx={4}>
                                 <TextField
                                   id={"title" + (i + 1)}
                                   label="Title"
@@ -823,7 +910,7 @@ export const AddResume = (props) => {
                                 />
                               </Grid>
 
-                              <Grid item xs={3} md={3} sx={3}>
+                              <Grid item xs={4} md={4} sx={4}>
                                 <TextField
                                   id={"location" + (i + 1)}
                                   label="Location"
@@ -935,6 +1022,42 @@ export const AddResume = (props) => {
                                 */}
                               </Grid>
 
+                              <Grid item xs={11} md={11} sx={11}>
+                                <TextField
+                                  id={"roles_" + (i + 1)}
+                                  label={"Roles & Responsibilities"}
+                                  type="text"
+                                  multiline
+                                  rows={3}
+                                  placeholder="a. Requirement Gathering &#13;&#10;b. Front-end Development &#13;&#10;c. API development"
+                                  value={experience.roles.value}
+                                  onChange={(e) => {
+                                    addResumeForm.onFormFieldChange(e, [
+                                      "experience",
+                                      i,
+                                      "roles",
+                                    ]);
+                                  }}
+                                  onBlur={(e) => {
+                                    addResumeForm.onFormFieldChange(e, [
+                                      "experience",
+                                      i,
+                                      "roles",
+                                    ]);
+                                  }}
+                                  error={
+                                    experience.roles.errors.length == 0
+                                      ? false
+                                      : true
+                                  }
+                                  helperText={experience.roles.errors.join(
+                                    "\n"
+                                  )}
+                                  variant="outlined"
+                                  fullWidth
+                                />
+                              </Grid>
+
                               <Grid item xs={1} md={1} sx={1}>
                                 {i ===
                                   resumeFormFields.experiences.length - 1 && (
@@ -944,14 +1067,18 @@ export const AddResume = (props) => {
                                   >
                                     <IconButton
                                       onClick={() => {
-                                        onAdd(["experiences"], fieldsmap["experiences"]);
+                                        onAdd(
+                                          ["experiences"],
+                                          fieldsmap["experiences"]
+                                        );
                                       }}
                                     >
                                       <AddCircleOutlineOutlinedIcon />
                                     </IconButton>
                                   </Tooltip>
                                 )}
-                                {i > 0 && (
+                                {resumeFormFields.experiences.length >
+                                  minExp && (
                                   <Tooltip
                                     title="Delete Skill"
                                     placement="bottom"
@@ -968,19 +1095,59 @@ export const AddResume = (props) => {
                               </Grid>
                             </Grid>
                           </div>
-                        );
-                        return expDiv;
-                      })}
-                    </CardContent>
-                  </Card>
+                        </CardContent>
+                      </Card>
+                    );
+                    return expDiv;
+                  })}
                 </>
               )}
 
-              {activeSection === "temp" && <ResumeTemplate addResumeForm={addResumeForm} resumeFormFields={resumeFormFields} setResumeFormFields={setResumeFormFields} onAdd={onAdd} onDlt={onDlt} />}
-              {activeSection === "edu" && <EduTemp addResumeForm={addResumeForm} resumeFormFields={resumeFormFields} setResumeFormFields={setResumeFormFields} onAdd={onAdd} onDlt={onDlt} />}
-              {activeSection === "proj" && <ProjTemp addResumeForm={addResumeForm} resumeFormFields={resumeFormFields} setResumeFormFields={setResumeFormFields} onAdd={onAdd} onDlt={onDlt} />}
-              {activeSection === "lang" && <LangTemp addResumeForm={addResumeForm} resumeFormFields={resumeFormFields} setResumeFormFields={setResumeFormFields} onAdd={onAdd} onDlt={onDlt} />}
-              {activeSection === "cert" && <CertTemp addResumeForm={addResumeForm} resumeFormFields={resumeFormFields} setResumeFormFields={setResumeFormFields} onAdd={onAdd} onDlt={onDlt} />}
+              {activeSection === "temp" && (
+                <ResumeTemplate
+                  addResumeForm={addResumeForm}
+                  resumeFormFields={resumeFormFields}
+                  setResumeFormFields={setResumeFormFields}
+                  onAdd={onAdd}
+                  onDlt={onDlt}
+                />
+              )}
+              {activeSection === "edu" && (
+                <EduTemp
+                  addResumeForm={addResumeForm}
+                  resumeFormFields={resumeFormFields}
+                  setResumeFormFields={setResumeFormFields}
+                  onAdd={onAdd}
+                  onDlt={onDlt}
+                />
+              )}
+              {activeSection === "proj" && (
+                <ProjTemp
+                  addResumeForm={addResumeForm}
+                  resumeFormFields={resumeFormFields}
+                  setResumeFormFields={setResumeFormFields}
+                  onAdd={onAdd}
+                  onDlt={onDlt}
+                />
+              )}
+              {activeSection === "lang" && (
+                <LangTemp
+                  addResumeForm={addResumeForm}
+                  resumeFormFields={resumeFormFields}
+                  setResumeFormFields={setResumeFormFields}
+                  onAdd={onAdd}
+                  onDlt={onDlt}
+                />
+              )}
+              {activeSection === "cert" && (
+                <CertTemp
+                  addResumeForm={addResumeForm}
+                  resumeFormFields={resumeFormFields}
+                  setResumeFormFields={setResumeFormFields}
+                  onAdd={onAdd}
+                  onDlt={onDlt}
+                />
+              )}
             </form>
           </Grid>
         </Grid>
@@ -995,7 +1162,7 @@ export const AddResume = (props) => {
             onFormSubmit();
           }}
         >
-          {activeSection === tabs[tabs.length - 1] ? "SAVE" : "NEXT" } 
+          {activeSection === tabs[tabs.length - 1] ? "SAVE" : "NEXT"}
         </Button>
       </div>
     </Dialog>
