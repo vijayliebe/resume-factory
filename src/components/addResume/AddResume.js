@@ -160,9 +160,9 @@ export const AddResume = (props) => {
     technicalSkills: technicalSkillFields,
     professionalSkills: professionalSkillFields,
     experiences: experiencesFields,
-    educations: {},
-    projects: {},
-    certificates: {},
+    educations: [],
+    projects: [],
+    certificates: [],
     languages: {}
   };
 
@@ -976,11 +976,11 @@ export const AddResume = (props) => {
                 </>
               )}
 
-              {activeSection === "temp" && <ResumeTemplate />}
-              {activeSection === "edu" && <EduTemp />}
-              {activeSection === "proj" && <ProjTemp />}
+              {activeSection === "temp" && <ResumeTemplate addResumeForm={addResumeForm} resumeFormFields={resumeFormFields} setResumeFormFields={setResumeFormFields} onAdd={onAdd} onDlt={onDlt} />}
+              {activeSection === "edu" && <EduTemp addResumeForm={addResumeForm} resumeFormFields={resumeFormFields} setResumeFormFields={setResumeFormFields} onAdd={onAdd} onDlt={onDlt} />}
+              {activeSection === "proj" && <ProjTemp addResumeForm={addResumeForm} resumeFormFields={resumeFormFields} setResumeFormFields={setResumeFormFields} onAdd={onAdd} onDlt={onDlt} />}
               {activeSection === "lang" && <LangTemp addResumeForm={addResumeForm} resumeFormFields={resumeFormFields} setResumeFormFields={setResumeFormFields} onAdd={onAdd} onDlt={onDlt} />}
-              {activeSection === "cert" && <CertTemp />}
+              {activeSection === "cert" && <CertTemp addResumeForm={addResumeForm} resumeFormFields={resumeFormFields} setResumeFormFields={setResumeFormFields} onAdd={onAdd} onDlt={onDlt} />}
             </form>
           </Grid>
         </Grid>

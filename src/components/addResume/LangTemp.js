@@ -40,11 +40,7 @@ export const LangTemp = ({
   useEffect((e) => {
     let copyResumeFormFields = JSON.parse(JSON.stringify(resumeFormFields));
     copyResumeFormFields["languages"] = langFields;
-    console.log(
-      "ue Lang Component :: copyResumeFormFields ::",
-      copyResumeFormFields
-    );
-    setResumeFormFields(copyResumeFormFields);
+    addResumeForm.setState(copyResumeFormFields);
   }, []);
 
   return (
