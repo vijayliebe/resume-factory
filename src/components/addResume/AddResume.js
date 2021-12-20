@@ -95,18 +95,18 @@ export const AddResume = (props) => {
   };
 
   const tabList = {
-    gen: "General",
-    edu: "Education",
-    exp: "Experiences",
-    proj: "Projects",
-    ts: "Technical Skills",
-    ps: "Professional Skills",
-    lang: "Languages",
-    cert: "Certifications & Rewards",
-    temp: "Templates",
+    general: "General",
+    educations: "Education",
+    experiences: "Experiences",
+    projects: "Projects",
+    technicalSkills: "Technical Skills",
+    professionalSkills: "Professional Skills",
+    languages: "Languages",
+    certificates: "Certifications & Rewards",
+    templates: "Templates",
   };
   const tabs = Object.keys(tabList);
-  const [activeSection, setActiveSection] = useState("gen");
+  const [activeSection, setActiveSection] = useState("general");
   const minTechnicalSkills = 4;
   const minProfessionalSkills = 2;
   const minExp = 1;
@@ -261,30 +261,34 @@ export const AddResume = (props) => {
     setResumeFormFields(copyResumeFormFields);
   };
 
-  const isFormValid = () => {
-    let resumePayload = {};
-
-    /* Object.keys(formFields).forEach((key)=>{
-      //console.log(formFields[key]['getter']['v']);
-      resumePayload[key] = formFields[key]['getter']['v'];
-    });
-
-    resumePayload['technicalSkills'] = technicalSkills.map((ts)=> {return {"name": ts.name, "rating": ts.rating}});
-    resumePayload['professionalSkills'] = professionalSkills.map((ps)=> {return {"name": ps.name, "rating": ps.rating}});
-    resumePayload['experiences'] = experiences.map((exp)=> {return {"title": exp.title, "employmentType": exp.employmentType, "company": exp.company, "location": exp.location, "startDate": exp.startDate, "endDate": exp.endDate}});
- */
-    return resumePayload;
-  };
   const onFormSubmit = () => {
-    // const payload = isFormValid();
-    // console.log("onSubmit :: payload ::", payload);
-    // console.log("ResumeService ::", ResumeService);
-    // ResumeService.saveResume(payload);
     if (activeSection === tabs[tabs.length - 1]) {
       // save
-      props.closeForm();
+      const errorTab = [];
+      const tabErrors = JSON.parse(JSON.stringify(tabList));
+      for(let tab in tabErrors){
+        const error = !addResumeForm.isFormValid(tab)
+        if(error){
+          errorTab.push(tab);
+          tabErrors[tab] = error;
+          break;
+        }
+      }
+
+      console.log("onFormSubmit :: errorTab ::", errorTab);
+
+      if(errorTab.length){
+        setActiveSection(errorTab[0]);
+      } else {
+        const payload = addResumeForm.getValue();
+        console.log("onFormSubmit :: payload ::", payload);
+        props.closeForm();
+      }
+      
     } else {
-      setActiveSection(tabs[tabs.indexOf(activeSection) + 1]);
+      if(addResumeForm.isFormValid(activeSection)){
+        setActiveSection(tabs[tabs.indexOf(activeSection) + 1]);
+      }
     }
   };
 
@@ -342,7 +346,7 @@ export const AddResume = (props) => {
             sx={10}
           >
             <form style={addResumeCont.form}>
-              {(activeSection === "intro" || activeSection === "gen") && (
+              {(activeSection === "intro" || activeSection === "general") && (
                 <>
                   <h2 className="title2">Introduction</h2>
                   <Card>
@@ -443,7 +447,7 @@ export const AddResume = (props) => {
                 </>
               )}
 
-              {(activeSection === "cd" || activeSection === "gen") && (
+              {(activeSection === "cd" || activeSection === "general") && (
                 <>
                   <h2 className="title2">Contact Details</h2>
                   <Card>
@@ -577,7 +581,7 @@ export const AddResume = (props) => {
                 </>
               )}
 
-              {activeSection === "ts" && (
+              {activeSection === "technicalSkills" && (
                 <>
                   {/* Technical skills - start */}
                   <h2 className="title2">Technical Skills</h2>
@@ -687,7 +691,7 @@ export const AddResume = (props) => {
                 </>
               )}
 
-              {activeSection === "ps" && (
+              {activeSection === "professionalSkills" && (
                 <>
                   {/* Professional skills - start */}
                   <h2 className="title2">Professional Skills</h2>
@@ -800,7 +804,7 @@ export const AddResume = (props) => {
                 </>
               )}
 
-              {activeSection === "exp" && (
+              {activeSection === "experiences" && (
                 <>
                   <h2 className="title2">Experience </h2>
 
@@ -1103,7 +1107,7 @@ export const AddResume = (props) => {
                 </>
               )}
 
-              {activeSection === "temp" && (
+              {activeSection === "templates" && (
                 <ResumeTemplate
                   addResumeForm={addResumeForm}
                   resumeFormFields={resumeFormFields}
@@ -1112,7 +1116,7 @@ export const AddResume = (props) => {
                   onDlt={onDlt}
                 />
               )}
-              {activeSection === "edu" && (
+              {activeSection === "educations" && (
                 <EduTemp
                   addResumeForm={addResumeForm}
                   resumeFormFields={resumeFormFields}
@@ -1121,7 +1125,7 @@ export const AddResume = (props) => {
                   onDlt={onDlt}
                 />
               )}
-              {activeSection === "proj" && (
+              {activeSection === "projects" && (
                 <ProjTemp
                   addResumeForm={addResumeForm}
                   resumeFormFields={resumeFormFields}
@@ -1130,7 +1134,7 @@ export const AddResume = (props) => {
                   onDlt={onDlt}
                 />
               )}
-              {activeSection === "lang" && (
+              {activeSection === "languages" && (
                 <LangTemp
                   addResumeForm={addResumeForm}
                   resumeFormFields={resumeFormFields}
@@ -1139,7 +1143,7 @@ export const AddResume = (props) => {
                   onDlt={onDlt}
                 />
               )}
-              {activeSection === "cert" && (
+              {activeSection === "certificates" && (
                 <CertTemp
                   addResumeForm={addResumeForm}
                   resumeFormFields={resumeFormFields}

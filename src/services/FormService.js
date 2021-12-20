@@ -26,7 +26,7 @@ const validators = {
   email: {
     name: "email",
     pattern:
-      '^(([^<>()[].,;:s@"]+(.[^<>()[].,;:s@"]+)*)|(".+"))@(([^<>()[].,;:s@"]+.)+[^<>()[].,;:s@"]{2,})$',
+      "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])+",
     errorMessage: "Invalid email",
   },
   url: {
@@ -93,11 +93,57 @@ const getState = () => {
 }
 /* form operations - end */
 
-const isFormValid = () => {};
+const isFormValid = (formName) => {
+  let valid =  true;
+  let formCopy = JSON.parse(JSON.stringify(resumeFormFields));
+
+  let iterate = (formObj) => {
+    for(let i in formObj){
+      let v = formObj[i];
+      if(typeof formObj[i] === "object" && Object.keys(formObj[i]).includes("dirty")){
+        //formObj[i] = formObj[i].value;
+        const errors = validateInput(formObj[i].value, formObj[i].validators);
+        formObj[i].errors = errors;
+        if(errors.length){
+          valid = false;
+        }
+      } else if(typeof v === "object") {
+        iterate(v);
+      } else {
+        console.log("v :: ", v);
+      }
+    }
+  }
+  iterate(formCopy[formName] || formCopy);
+  console.log("isFormValid :: formName ::", formName);
+  console.log("isFormValid :: formCopy ::", formCopy);
+  setState(formCopy);
+  return valid;
+};
+
+const getValue = () => {
+  console.log("getValue :: resumeFormFields ::", resumeFormFields);
+  let formCopy = JSON.parse(JSON.stringify(resumeFormFields));
+  let iterate = (formObj) => {
+    for(let i in formObj){
+      let v = formObj[i];
+      if(typeof formObj[i] === "object" && Object.keys(formObj[i]).includes("dirty")){
+        formObj[i] = formObj[i].value;
+      } else if(typeof v === "object") {
+        iterate(v);
+      } else {
+        console.log("v :: ", v);
+      }
+    }
+  }
+  iterate(formCopy);
+  return formCopy;
+}
 
 export const FormService = {
   init,
   isFormValid,
+  getValue,
   getGeneralFieldObj,
   onFormFieldChange,
   setState,
