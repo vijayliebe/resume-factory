@@ -115,8 +115,8 @@ const isFormValid = (formName) => {
     }
   }
   iterate(formCopy[formName] || formCopy);
-  console.log("isFormValid :: formName ::", formName);
-  console.log("isFormValid :: formCopy ::", formCopy);
+  // console.log("isFormValid :: formName ::", formName);
+  // console.log("isFormValid :: formCopy ::", JSON.parse(JSON.stringify(formCopy)));
   setState(formCopy);
   return valid;
 };

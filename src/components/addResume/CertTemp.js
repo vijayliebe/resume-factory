@@ -36,6 +36,7 @@ export const CertTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
   const certList = new Array(minCert).fill(certFields);
 
   useEffect((e) => {
+    if(resumeFormFields?.certificates?.length) return;
     let copyResumeFormFields = JSON.parse(JSON.stringify(resumeFormFields));
     copyResumeFormFields["certificates"] = certList;
     addResumeForm.setState(copyResumeFormFields);

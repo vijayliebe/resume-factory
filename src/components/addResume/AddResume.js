@@ -123,9 +123,6 @@ export const AddResume = (props) => {
         [addResumeForm.validators.required],
         "fullTime"
       ),
-      fullTime: addResumeForm.getGeneralFieldObj([
-        addResumeForm.validators.required,
-      ]),
       company: addResumeForm.getGeneralFieldObj([
         addResumeForm.validators.required,
       ]),
@@ -807,7 +804,7 @@ export const AddResume = (props) => {
               {activeSection === "experiences" && (
                 <>
                   <h2 className="title2">Experience </h2>
-
+                  
                   {resumeFormFields.experiences.map((experience, i) => {
                     const expDiv = (
                       <Card key={"exp_" + i} className="card-container">
@@ -1037,14 +1034,14 @@ export const AddResume = (props) => {
                                   value={experience.roles.value}
                                   onChange={(e) => {
                                     addResumeForm.onFormFieldChange(e, [
-                                      "experience",
+                                      "experiences",
                                       i,
                                       "roles",
                                     ]);
                                   }}
                                   onBlur={(e) => {
                                     addResumeForm.onFormFieldChange(e, [
-                                      "experience",
+                                      "experiences",
                                       i,
                                       "roles",
                                     ]);

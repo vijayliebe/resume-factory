@@ -48,6 +48,7 @@ export const ProjTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
   const projList = new Array(minProject).fill(projFields);
 
   useEffect((e) => {
+    if(resumeFormFields?.projects?.length) return;
     let copyResumeFormFields = JSON.parse(JSON.stringify(resumeFormFields));
     copyResumeFormFields["projects"] = projList;
     addResumeForm.setState(copyResumeFormFields);

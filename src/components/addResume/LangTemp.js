@@ -38,6 +38,7 @@ export const LangTemp = ({
   };
 
   useEffect((e) => {
+    if (resumeFormFields?.languages?.length) return;
     let copyResumeFormFields = JSON.parse(JSON.stringify(resumeFormFields));
     copyResumeFormFields["languages"] = langFields;
     addResumeForm.setState(copyResumeFormFields);
