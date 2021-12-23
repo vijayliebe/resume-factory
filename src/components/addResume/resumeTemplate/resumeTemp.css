@@ -15,9 +15,12 @@
   text-align: center;
   position: relative;
 }
+
 .resume-temp-grid.active {
   /* background: #cfcdc7; */
-  background: #eee;
+  background: #b8dbff;
+  border: 1px solid #b8dbff;
+  box-shadow: 1px 1px 1px #b8dbff;
 }
 
 .resume-temp-title {
@@ -25,6 +28,10 @@
   bottom: 8px;
   position: absolute;
   left: 50%;
+}
+
+.resume-temp-title.selected {
+  color: #1976d2;
 }
 
 .resume-temp-check-icon {

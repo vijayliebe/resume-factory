@@ -18,6 +18,10 @@ export const ResumeFactory = () => {
     const [showAddResume, setShowAddResume] = useState(false);
     const [resumes, setResumes] = useState([]);
 
+    const fetchResumes = () => {
+        const resumes = ResumeService.getResumes();
+        setResumes(resumes);
+    }
     const addResumme = () => {
         console.log("addResumme btn clicked !!!");
         setShowAddResume(true);
@@ -25,12 +29,12 @@ export const ResumeFactory = () => {
 
     const closeForm = () => {
         setShowAddResume(false);
+        fetchResumes();
     }
 
     // fetch resumes
     useEffect((e)=>{
-        const resumes = ResumeService.getResumes();
-        setResumes(resumes);
+        fetchResumes();
     }, []);
 
     return (

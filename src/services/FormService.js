@@ -60,19 +60,29 @@ const getGeneralFieldObj = (validators, value) => {
   return gfo;
 };
 
-const onFormFieldChange = (e, formNames) => {
-  const [inputValue] = [e.target.value];
+const onFormFieldChange = (e, formNames, disabled) => {
+  const inputValue = e.nativeEvent
+    ? e.target.type === "checkbox"
+      ? e.target.checked
+      : e.target.value
+    : e;
   let copyResumeFormFields = JSON.parse(JSON.stringify(resumeFormFields));
   let formField = copyResumeFormFields;
   for (let fn of formNames) {
     formField = formField[fn];
   }
 
-  const errors = validateInput(inputValue, formField.validators);
+  if(disabled === undefined){
+    // console.log("formNames ::", formNames);
+    // console.log("formField ::", formField);
 
-  formField.value = inputValue;
-  "dirty" in formField ? (formField.dirty = true) : delete formField.dirty;
-  formField.errors = errors;
+    const errors = validateInput(inputValue, formField.validators);
+    formField.value = inputValue;
+    "dirty" in formField ? (formField.dirty = true) : delete formField.dirty;
+    formField.errors = errors;
+  }
+
+  formField.disabled = disabled;
 
   // console.log("onGeneralFieldChange :: formField ::", formField);
   // console.log("onGeneralFieldChange :: copyResumeFormFields ::", copyResumeFormFields);

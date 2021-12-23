@@ -10,6 +10,7 @@ import {
   Card,
   CardContent,
   CardActions,
+  Checkbox,
   Slider,
   InputLabel,
   MenuItem,
@@ -140,6 +141,7 @@ export const AddResume = (props) => {
       roles: addResumeForm.getGeneralFieldObj([
         addResumeForm.validators.required,
       ]),
+      current: addResumeForm.getGeneralFieldObj()
     },
   };
 
@@ -196,6 +198,7 @@ export const AddResume = (props) => {
     projects: [],
     certificates: [],
     languages: {},
+    template: {}
   };
 
   const [resumeFormFields, setResumeFormFields] = useState(resumeFormFieldsObj);
@@ -259,6 +262,8 @@ export const AddResume = (props) => {
   };
 
   const onFormSubmit = () => {
+    console.log("onFormSubmit :: resumeFormFields ::", resumeFormFields);
+
     if (activeSection === tabs[tabs.length - 1]) {
       // save
       const errorTab = [];
@@ -279,6 +284,7 @@ export const AddResume = (props) => {
       } else {
         const payload = addResumeForm.getValue();
         console.log("onFormSubmit :: payload ::", payload);
+        ResumeService.saveResume(payload);
         props.closeForm();
       }
       
@@ -813,6 +819,26 @@ export const AddResume = (props) => {
                             <div className="snodiv">
                               {"#EXPERIENCE : " + (i + 1)}
                             </div>
+                            <div>
+                              <Checkbox className="checkBox-pad"
+                                {... { inputProps: { 'aria-label': 'Checkbox demo' } }}
+                                sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
+                                onChange={(e)=>{
+                                  addResumeForm.onFormFieldChange(e, [
+                                    "experiences",
+                                    i,
+                                    "current",
+                                  ]);
+
+                                  addResumeForm.onFormFieldChange(e, [
+                                    "experiences",
+                                    i,
+                                    "endDate",
+                                  ], e.target.checked);
+                                }}
+                              />
+                              <span>Presently Working</span>
+                            </div>
                             <Grid container spacing={2}>
                               <Grid item xs={4} md={4} sx={4}>
                                 <TextField
@@ -988,6 +1014,7 @@ export const AddResume = (props) => {
                                   InputLabelProps={{
                                     shrink: true,
                                   }}
+                                  disabled={experience.endDate.disabled}
                                   value={experience.endDate.value}
                                   onChange={(e) => {
                                     addResumeForm.onFormFieldChange(e, [

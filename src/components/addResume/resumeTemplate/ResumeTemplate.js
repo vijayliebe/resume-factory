@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./resumeTemp.css";
 import {
   Alert,
@@ -19,7 +19,13 @@ import {
   Tooltip,
 } from "@mui/material";
 
-import { Add, Delete, CheckCircle } from "@mui/icons-material";
+import {
+  Add,
+  Delete,
+  CheckCircle,
+  RadioButtonUnchecked,
+  RadioButtonChecked,
+} from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 import { ResumePreview } from "./ResumePreview";
 
@@ -27,44 +33,59 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="left" ref={ref} {...props} />;
 });
 
-export const ResumeTemplate = (props) => {
+export const ResumeTemplate = ({
+  addResumeForm,
+  resumeFormFields,
+  onAdd,
+  onDlt,
+}) => {
   const handleClose = () => {
     setShowPreview(false);
   };
 
   const _resumeTemplates = [
     {
+      id: 0,
       name: "Professional",
       image: "resume_temp_1.jpeg",
-      active: true,
     },
     {
+      id: 1,
       name: "Modern",
       image: "resume_temp_2.jpeg",
-      active: false,
     },
   ];
 
-  const [resumeTemplates, setResumeTemplates] = useState(_resumeTemplates);
   const [showPreview, setShowPreview] = useState(false);
-  const [selectedResumeTemp, setSelectedResumeTemp] = useState(
-    resumeTemplates.filter((rt) => {
-      return rt.active == true;
-    })[0]
-  );
 
   const selectResumeTemp = (idx) => {
-    setSelectedResumeTemp(resumeTemplates[idx]);
-    let copy = resumeTemplates.map((rt, i) => {
-      rt.active = i == idx ? true : false;
-      return rt;
-    });
-    setResumeTemplates(copy);
+    console.log("selectResumeTemp :: idx ::", idx);
+    console.log(
+      "selectResumeTemp :: _resumeTemplates[idx] ::",
+      _resumeTemplates[idx]
+    );
+    setTempleteInResumeObj(_resumeTemplates[idx]);
   };
 
   const onPreviewBtnClick = () => {
     setShowPreview(true);
   };
+
+  const setTempleteInResumeObj = (selectedResumeTemp) => {
+    console.log(
+      "setTempleteInResumeObj :: selectedResumeTemp ::",
+      selectedResumeTemp
+    );
+    let copyResumeFormFields = JSON.parse(JSON.stringify(resumeFormFields));
+    copyResumeFormFields["template"] = selectedResumeTemp;
+    addResumeForm.setState(copyResumeFormFields);
+    console.log("resumeFormFields.template ::", resumeFormFields.template);
+  };
+
+  useEffect((e) => {
+    if (resumeFormFields?.template?.id) return;
+    setTempleteInResumeObj(_resumeTemplates[0]);
+  }, []);
 
   return (
     <>
@@ -72,14 +93,17 @@ export const ResumeTemplate = (props) => {
       <Card>
         <CardContent className="p-rel">
           <Grid className="contRowMargin" container spacing={2}>
-            {resumeTemplates.map((rt, i) => {
+            {_resumeTemplates?.map((rt, i) => {
               return (
                 <Grid
                   key={"rt" + i}
                   onClick={() => {
                     selectResumeTemp(i);
                   }}
-                  className={"resume-temp-grid " + (rt.active && "active")}
+                  className={
+                    "resume-temp-grid " +
+                    (rt.id === resumeFormFields.template?.id && "active")
+                  }
                   item
                   xs={2}
                   md={2}
@@ -91,12 +115,16 @@ export const ResumeTemplate = (props) => {
                     alt={rt.name}
                     loading="lazy"
                   />
-                  {rt.active && (
-                    <div className="resume-temp-check-icon">
-                      <CheckCircle />
-                    </div>
-                  )}
-                  <div className="bold resume-temp-title">{rt.name}</div>
+
+                  <div className="resume-temp-check-icon">
+                    {rt.id === resumeFormFields.template?.id ? (
+                      <RadioButtonChecked color="primary"/>
+                    ) : (
+                      <RadioButtonUnchecked />
+                    )}
+                  </div>
+
+                  <div className={"bold resume-temp-title " + (rt.id === resumeFormFields.template?.id && "selected")}>{rt.name}</div>
                 </Grid>
               );
             })}
@@ -131,7 +159,7 @@ export const ResumeTemplate = (props) => {
         >
           <CloseIcon />
         </IconButton>
-        <ResumePreview selectedResumeTemp={selectedResumeTemp} />
+        <ResumePreview selectedResumeTemp={resumeFormFields.template} />
       </Dialog>
     </>
   );
