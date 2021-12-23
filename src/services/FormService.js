@@ -61,7 +61,7 @@ const getGeneralFieldObj = (validators, value) => {
 };
 
 const onFormFieldChange = (e, formNames, disabled) => {
-  const inputValue = e.nativeEvent
+  const inputValue = e.target
     ? e.target.type === "checkbox"
       ? e.target.checked
       : e.target.value

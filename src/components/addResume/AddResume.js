@@ -146,6 +146,7 @@ export const AddResume = (props) => {
   };
 
   const generalFields = {
+    resumeName: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
     name: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
     title: addResumeForm.getGeneralFieldObj([
       addResumeForm.validators.required,
@@ -351,6 +352,44 @@ export const AddResume = (props) => {
             <form style={addResumeCont.form}>
               {(activeSection === "intro" || activeSection === "general") && (
                 <>
+                  <h2 className="title2">Resume Name</h2>
+                  <Card>
+                    <CardContent>
+                      <Grid container spacing={2}>
+                        <Grid item xs={6} md={6} sx={6}>
+                          <TextField
+                            id="resumeName"
+                            label="Resume Name"
+                            variant="outlined"
+                            value={resumeFormFields.general.resumeName.value}
+                            placeholder="eg. Resume-India"
+                            onChange={(e) => {
+                              addResumeForm.onFormFieldChange(e, [
+                                "general",
+                                "resumeName",
+                              ]);
+                            }}
+                            onBlur={(e) => {
+                              addResumeForm.onFormFieldChange(e, [
+                                "general",
+                                "resumeName",
+                              ]);
+                            }}
+                            error={
+                              resumeFormFields.general.resumeName.errors.length == 0
+                                ? false
+                                : true
+                            }
+                            helperText={resumeFormFields.general.resumeName.errors.join(
+                              "\n"
+                            )}
+                            fullWidth
+                          />
+                        </Grid>
+                      </Grid>
+                    </CardContent>
+                  </Card>
+
                   <h2 className="title2">Introduction</h2>
                   <Card>
                     <CardContent>
@@ -388,7 +427,8 @@ export const AddResume = (props) => {
                         <Grid item xs={6} md={6} sx={6}>
                           <TextField
                             id="title"
-                            label="Title eg. Full Stack Developer @ABC"
+                            label="TitleC"
+                            placeholder="eg. Full Stack Developer @AB"
                             variant="outlined"
                             value={resumeFormFields.general.title.value}
                             onChange={(e) => {
@@ -460,7 +500,8 @@ export const AddResume = (props) => {
                           <TextField
                             id="phone"
                             label="Phone"
-                            type="number"
+                            placeholder="1234567890, 0987654321"
+                            type="text"
                             variant="outlined"
                             value={resumeFormFields.general.phone.value}
                             onChange={(e) => {

@@ -50,7 +50,7 @@ export const LangTemp = ({
       <Card>
         <CardContent>
           {resumeFormFields?.languages?.lang?.map((ts, i) => {
-            const tsr = resumeFormFields.technicalSkills.ratings[i];
+            const tsr = resumeFormFields.languages.ratings[i];
             const tsdiv = (
               <Grid
                 key={"row_" + i}

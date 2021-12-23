@@ -41,7 +41,7 @@ export const ListResume = (props) => {
             <hr/>
             {props?.resumes?.map((r, i)=>{
                 return <div key={'resume'+i} style={styles.listRow}>
-                                            <div className="fl" style={styles.listCol}>{r?.general?.name}</div>
+                                            <div className="fl" style={styles.listCol}>{r?.general?.resumeName}</div>
                                             <div className="fl" style={styles.listCol}>{r?.general?.title}</div>
                                             <div className="fl" style={styles.listCol}>
                                                 <Tooltip title="Edit" placement="bottom">
