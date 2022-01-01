@@ -21,7 +21,7 @@ import {
 import { Add, Delete, CheckCircle } from "@mui/icons-material";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 
-export const ProjTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
+export const ProjTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt, resumeEditData }) => {
   const minProject = 1;
   const projFields = {
     name: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
@@ -47,7 +47,7 @@ export const ProjTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
     ]),
     current: addResumeForm.getGeneralFieldObj([], false)
   };
-  const projList = new Array(minProject).fill(projFields);
+  const projList = new Array(resumeEditData?.projects?.length || minProject).fill(projFields);
 
   useEffect((e) => {
     if(resumeFormFields?.projects?.length) return;
@@ -55,6 +55,10 @@ export const ProjTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
     copyResumeFormFields["projects"] = projList;
     addResumeForm.setState(copyResumeFormFields);
     console.log("resumeFormFields.projects ::", resumeFormFields.projects);
+
+    setTimeout(() => {
+      if(resumeEditData) addResumeForm.setValue(resumeEditData);
+    });
   }, []);
 
   return (
@@ -70,6 +74,7 @@ export const ProjTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
                               <Checkbox className="checkBox-pad"
                                 {... { inputProps: { 'aria-label': 'Checkbox demo' } }}
                                 sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
+                                checked={p.current.value}
                                 onChange={(e)=>{
                                   addResumeForm.onFormFieldChange(e, [
                                     "projects",

@@ -26,13 +26,14 @@ export const LangTemp = ({
   setResumeFormFields,
   onAdd,
   onDlt,
+  resumeEditData
 }) => {
   const minLangs = 2;
   const langFields = {
-    lang: new Array(minLangs).fill(
+    lang: new Array(resumeEditData?.languages?.length || minLangs).fill(
       addResumeForm.getGeneralFieldObj([addResumeForm.validators.required])
     ),
-    ratings: new Array(minLangs).fill(
+    ratings: new Array(resumeEditData?.languages?.length || minLangs).fill(
       addResumeForm.getGeneralFieldObj([addResumeForm.validators.required], 1)
     ),
   };
@@ -42,6 +43,10 @@ export const LangTemp = ({
     let copyResumeFormFields = JSON.parse(JSON.stringify(resumeFormFields));
     copyResumeFormFields["languages"] = langFields;
     addResumeForm.setState(copyResumeFormFields);
+
+    setTimeout(() => {
+      if(resumeEditData) addResumeForm.setValue(resumeEditData);
+    });
   }, []);
 
   return (

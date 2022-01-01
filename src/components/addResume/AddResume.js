@@ -112,6 +112,12 @@ export const AddResume = (props) => {
   const minProfessionalSkills = 2;
   const minExp = 1;
 
+  useEffect(() => {
+    console.log("resumeFormFields :: useEffect :: resumeEditData ::", props.resumeEditData);
+    console.log("resumeFormFields :: useEffect :: resumeFormFields ::", resumeFormFields);
+    if(props.resumeEditData) addResumeForm.setValue(props.resumeEditData);
+  }, []);
+
   /* form operations - start */
   const addResumeForm = FormService;
 
@@ -171,19 +177,19 @@ export const AddResume = (props) => {
   };
 
   const technicalSkillFields = {
-    skills: new Array(minTechnicalSkills).fill(
+    skills: new Array(props.resumeEditData?.technicalSkills?.length || minTechnicalSkills).fill(
       addResumeForm.getGeneralFieldObj([addResumeForm.validators.required])
     ),
-    ratings: new Array(minTechnicalSkills).fill(
+    ratings: new Array(props.resumeEditData?.technicalSkills?.length || minTechnicalSkills).fill(
       addResumeForm.getGeneralFieldObj([addResumeForm.validators.required], 1)
     ),
   };
 
   const professionalSkillFields = {
-    skills: new Array(minProfessionalSkills).fill(
+    skills: new Array(props.resumeEditData?.professionalSkills?.length || minProfessionalSkills).fill(
       addResumeForm.getGeneralFieldObj([addResumeForm.validators.required])
     ),
-    ratings: new Array(minProfessionalSkills).fill(
+    ratings: new Array(props.resumeEditData?.professionalSkills?.length || minProfessionalSkills).fill(
       addResumeForm.getGeneralFieldObj([addResumeForm.validators.required], 1)
     ),
   };
@@ -262,8 +268,8 @@ export const AddResume = (props) => {
     setResumeFormFields(copyResumeFormFields);
   };
 
-  const onFormSubmit = () => {
-    console.log("onFormSubmit :: resumeFormFields ::", resumeFormFields);
+  const onFormSubmit = (id) => {
+    console.log("onFormSubmit :: resumeFormFields :: id :: ", resumeFormFields, id);
 
     if (activeSection === tabs[tabs.length - 1]) {
       // save
@@ -285,7 +291,11 @@ export const AddResume = (props) => {
       } else {
         const payload = addResumeForm.getValue();
         console.log("onFormSubmit :: payload ::", payload);
-        ResumeService.saveResume(payload);
+        if(id){
+          ResumeService.editResume(id, payload);
+        } else {
+          ResumeService.saveResume(payload);
+        }
         props.closeForm();
       }
       
@@ -296,9 +306,6 @@ export const AddResume = (props) => {
     }
   };
 
-  useEffect(() => {
-    console.log("resumeFormFields :: useEffect ::");
-  }, []);
   return (
     <Dialog
       fullScreen
@@ -316,7 +323,8 @@ export const AddResume = (props) => {
         <CloseIcon />
       </IconButton>
       <div style={addResumeCont.main}>
-        <h1 className="title1">Add Resume</h1>
+        <h1 className="title1">{props.resumeEditData ? 'Edit' : 'Add'}  Resume </h1>
+        {/* <h3 className="title2"> {props.resumeEditData ?  props.resumeEditData?.general?.resumeName : ''}</h3> */}
         <hr></hr>
 
         <Grid container spacing={2}>
@@ -864,6 +872,7 @@ export const AddResume = (props) => {
                               <Checkbox className="checkBox-pad"
                                 {... { inputProps: { 'aria-label': 'Checkbox demo' } }}
                                 sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
+                                checked={experience.current.value}
                                 onChange={(e)=>{
                                   addResumeForm.onFormFieldChange(e, [
                                     "experiences",
@@ -1181,6 +1190,7 @@ export const AddResume = (props) => {
                   setResumeFormFields={setResumeFormFields}
                   onAdd={onAdd}
                   onDlt={onDlt}
+                  resumeEditData={props.resumeEditData}
                 />
               )}
               {activeSection === "educations" && (
@@ -1190,6 +1200,7 @@ export const AddResume = (props) => {
                   setResumeFormFields={setResumeFormFields}
                   onAdd={onAdd}
                   onDlt={onDlt}
+                  resumeEditData={props.resumeEditData}
                 />
               )}
               {activeSection === "projects" && (
@@ -1199,6 +1210,7 @@ export const AddResume = (props) => {
                   setResumeFormFields={setResumeFormFields}
                   onAdd={onAdd}
                   onDlt={onDlt}
+                  resumeEditData={props.resumeEditData}
                 />
               )}
               {activeSection === "languages" && (
@@ -1208,6 +1220,7 @@ export const AddResume = (props) => {
                   setResumeFormFields={setResumeFormFields}
                   onAdd={onAdd}
                   onDlt={onDlt}
+                  resumeEditData={props.resumeEditData}
                 />
               )}
               {activeSection === "certificates" && (
@@ -1217,6 +1230,7 @@ export const AddResume = (props) => {
                   setResumeFormFields={setResumeFormFields}
                   onAdd={onAdd}
                   onDlt={onDlt}
+                  resumeEditData={props.resumeEditData}
                 />
               )}
             </form>
@@ -1230,7 +1244,7 @@ export const AddResume = (props) => {
           variant="contained"
           color="success"
           onClick={() => {
-            onFormSubmit();
+            onFormSubmit(props?.resumeEditData?.id);
           }}
         >
           {activeSection === tabs[tabs.length - 1] ? "SAVE" : "NEXT"}

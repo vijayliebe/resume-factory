@@ -25,21 +25,22 @@ export const ResumeService = (() => {
     const editResume = (id, data) => {
         let resumes = localStorage.getItem('resumes') || "[]";
         resumes = JSON.parse(resumes);
-        resumes.forEach((r)=> {
+        resumes = resumes.map((r)=> {
             if(id == r.id){
                 r = data;
             }
+            return r;
         });
         localStorage.setItem('resumes', JSON.stringify(resumes));
     }
 
-    const dltResume = (id, data) => {
+    const dltResume = (id) => {
         let resumes = localStorage.getItem('resumes') || "[]";
         resumes = JSON.parse(resumes);
-        resumes.forEach((r, i)=> {
-            if(id == r.id){
-                resumes.splice(i, 1)
-            }
+        resumes = resumes.filter((r)=> {
+            if(id !== r.id){
+                return r;
+            } 
         });
         localStorage.setItem('resumes', JSON.stringify(resumes));
     }

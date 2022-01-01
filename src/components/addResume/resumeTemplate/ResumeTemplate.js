@@ -38,6 +38,7 @@ export const ResumeTemplate = ({
   resumeFormFields,
   onAdd,
   onDlt,
+  resumeEditData
 }) => {
   const handleClose = () => {
     setShowPreview(false);
@@ -84,7 +85,7 @@ export const ResumeTemplate = ({
 
   useEffect((e) => {
     if (resumeFormFields?.template?.id) return;
-    setTempleteInResumeObj(_resumeTemplates[0]);
+    resumeEditData?.template?.id ? setTempleteInResumeObj(resumeEditData?.template) : setTempleteInResumeObj(_resumeTemplates[0]);
   }, []);
 
   return (

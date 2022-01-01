@@ -20,7 +20,7 @@ import {
 import { Add, Delete, CheckCircle } from "@mui/icons-material";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 
-export const EduTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
+export const EduTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt, resumeEditData }) => {
   const minEducation = 2;
   const eduFields = {
     school: addResumeForm.getGeneralFieldObj([
@@ -42,7 +42,7 @@ export const EduTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
       addResumeForm.validators.required,
     ]),
   };
-  const eduList = new Array(minEducation).fill(eduFields);
+  const eduList = new Array(resumeEditData?.educations?.length || minEducation).fill(eduFields);
 
   useEffect((e) => {
     if (resumeFormFields?.educations?.length) return;
@@ -50,6 +50,9 @@ export const EduTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
     copyResumeFormFields["educations"] = eduList;
     addResumeForm.setState(copyResumeFormFields);
     console.log("resumeFormFields.educations ::", resumeFormFields.educations);
+    setTimeout(() => {
+      if(resumeEditData) addResumeForm.setValue(resumeEditData);
+    });
   }, []);
 
   return (

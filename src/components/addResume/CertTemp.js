@@ -20,8 +20,8 @@ import {
 import { Add, Delete, CheckCircle } from "@mui/icons-material";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 
-export const CertTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
-  const minCert = 0;
+export const CertTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt, resumeEditData }) => {
+  const minCert = 1;
   const certFields = {
     name: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
     org: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
@@ -33,7 +33,7 @@ export const CertTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
     cid: addResumeForm.getGeneralFieldObj(),
     url: addResumeForm.getGeneralFieldObj([addResumeForm.validators.url]),
   };
-  const certList = new Array(minCert).fill(certFields);
+  const certList = new Array(resumeEditData?.certificates?.length || minCert).fill(certFields);
 
   useEffect((e) => {
     if(resumeFormFields?.certificates?.length) return;
@@ -44,6 +44,10 @@ export const CertTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
       "resumeFormFields.certificates ::",
       resumeFormFields.certificates
     );
+
+    setTimeout(() => {
+      if(resumeEditData) addResumeForm.setValue(resumeEditData);
+    });
   }, []);
 
   return (
@@ -253,7 +257,7 @@ export const CertTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
                       </IconButton>
                     </Tooltip>
                   )}
-                  {resumeFormFields?.certificates?.length > minCert && (
+                  {/* {resumeFormFields?.certificates?.length > minCert && ( */}
                     <Tooltip
                       title="Delete Certificate or Licence"
                       placement="bottom"
@@ -266,7 +270,7 @@ export const CertTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
                         <Delete />
                       </IconButton>
                     </Tooltip>
-                  )}
+                  {/* )} */}
                 </Grid>
               </Grid>
             </CardContent>

@@ -150,10 +150,38 @@ const getValue = () => {
   return formCopy;
 }
 
+const setValue = (resumeEditData) => {
+  console.log("setValue :: resumeFormFields ::", resumeFormFields);
+  let formCopy = JSON.parse(JSON.stringify(resumeFormFields));
+  let dataCopy = JSON.parse(JSON.stringify(resumeEditData));
+  let iterate = (formObj, dataObj) => {
+    for(let i in formObj){
+      let v = formObj[i];
+      let dataValue = dataObj[i];
+      if(typeof formObj[i] === "object" && Object.keys(formObj[i]).includes("dirty")){
+        //formObj[i] = formObj[i].value;
+        if(formObj['current'] && i === "endDate") formObj[i].disabled = true;
+        formObj[i].value = dataObj[i];
+      } else if(typeof v === "object") {
+        iterate(v, dataValue);
+      } else {
+        console.log("v :: ", v);
+        console.log("dataValue :: ", dataValue);
+      }
+    }
+  }
+  iterate(formCopy, dataCopy);
+  console.log("setValue :: formCopy ::", formCopy);
+
+  setState(formCopy);
+  //return formCopy;
+}
+
 export const FormService = {
   init,
   isFormValid,
   getValue,
+  setValue,
   getGeneralFieldObj,
   onFormFieldChange,
   setState,
