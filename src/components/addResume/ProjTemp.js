@@ -16,6 +16,7 @@ import {
   Select,
   IconButton,
   Tooltip,
+  Checkbox
 } from "@mui/material";
 import { Add, Delete, CheckCircle } from "@mui/icons-material";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
@@ -44,6 +45,7 @@ export const ProjTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
     roles: addResumeForm.getGeneralFieldObj([
       addResumeForm.validators.required,
     ]),
+    current: addResumeForm.getGeneralFieldObj([], false)
   };
   const projList = new Array(minProject).fill(projFields);
 
@@ -64,6 +66,28 @@ export const ProjTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
           <Card key={"proj_" + i} className="card-container">
             <CardContent>
               <div className="snodiv">{"#PROJECT : " + (i + 1)}</div>
+              <div>
+                              <Checkbox className="checkBox-pad"
+                                {... { inputProps: { 'aria-label': 'Checkbox demo' } }}
+                                sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
+                                onChange={(e)=>{
+                                  addResumeForm.onFormFieldChange(e, [
+                                    "projects",
+                                    i,
+                                    "current",
+                                  ]);
+                                  setTimeout(() => {
+                                    addResumeForm.onFormFieldChange(e, [
+                                      "projects",
+                                      i,
+                                      "endDate",
+                                    ], e.target.checked);
+                                  });
+                                  
+                                }}
+                              />
+                              <span>Presently Working</span>
+                            </div>
               <Grid className="" container spacing={2}>
                 <Grid item xs={3} md={3} sx={3}>
                   <TextField
@@ -153,6 +177,7 @@ export const ProjTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
                     label={"End Date "}
                     type="date"
                     sx={{ width: "100%" }}
+                    disabled={p.endDate.disabled}
                     value={p.endDate.value}
                     onChange={(e) => {
                       addResumeForm.onFormFieldChange(e, [

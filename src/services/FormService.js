@@ -84,9 +84,9 @@ const onFormFieldChange = (e, formNames, disabled) => {
 
   formField.disabled = disabled;
 
-  // console.log("onGeneralFieldChange :: formField ::", formField);
-  // console.log("onGeneralFieldChange :: copyResumeFormFields ::", copyResumeFormFields);
-
+  //console.log("onGeneralFieldChange :: formField ::", formField);
+  //console.log("onGeneralFieldChange :: copyResumeFormFields ::", copyResumeFormFields);
+  //console.log("--------------------------------------------------------");
   setResumeFormFields(copyResumeFormFields);
 };
 

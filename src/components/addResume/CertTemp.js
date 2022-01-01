@@ -21,7 +21,7 @@ import { Add, Delete, CheckCircle } from "@mui/icons-material";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 
 export const CertTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
-  const minCert = 1;
+  const minCert = 0;
   const certFields = {
     name: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
     org: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
@@ -48,7 +48,25 @@ export const CertTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt }) => {
 
   return (
     <div>
-      <h2 className="title2">Certification or License</h2>
+      <h2 className="title2">
+        Certification or License
+
+        {!resumeFormFields?.certificates?.length && (
+                    <Tooltip
+                      title="Add New Certificate or Licence"
+                      placement="bottom"
+                    >
+                      <IconButton
+                        onClick={() => {
+                          onAdd(["certificates"], certFields);
+                        }}
+                      >
+                        <AddCircleOutlineOutlinedIcon />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+        
+        </h2>
 
       {resumeFormFields?.certificates?.map((cert, i) => {
         const projDiv = (

@@ -141,7 +141,7 @@ export const AddResume = (props) => {
       roles: addResumeForm.getGeneralFieldObj([
         addResumeForm.validators.required,
       ]),
-      current: addResumeForm.getGeneralFieldObj()
+      current: addResumeForm.getGeneralFieldObj([], false)
     },
   };
 
@@ -427,7 +427,7 @@ export const AddResume = (props) => {
                         <Grid item xs={6} md={6} sx={6}>
                           <TextField
                             id="title"
-                            label="TitleC"
+                            label="Title"
                             placeholder="eg. Full Stack Developer @AB"
                             variant="outlined"
                             value={resumeFormFields.general.title.value}
@@ -870,12 +870,14 @@ export const AddResume = (props) => {
                                     i,
                                     "current",
                                   ]);
-
-                                  addResumeForm.onFormFieldChange(e, [
-                                    "experiences",
-                                    i,
-                                    "endDate",
-                                  ], e.target.checked);
+                                  setTimeout(() => {
+                                    addResumeForm.onFormFieldChange(e, [
+                                      "experiences",
+                                      i,
+                                      "endDate",
+                                    ], e.target.checked);
+                                  });
+                                  
                                 }}
                               />
                               <span>Presently Working</span>
