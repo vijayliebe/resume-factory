@@ -44,7 +44,8 @@ export const ListResume = (props) => {
 
   const deleteResume = (idx) => {
     console.log("deleteResume btn clicked :: idx :: ", idx, props?.resumes?.[idx]);
-    ResumeService.dltResume(idx, props?.resumes?.[idx]?.id);
+    ResumeService.dltResume(props?.resumes?.[idx]?.id);
+    props.fetchResumes();
   };
 
   const editResume = (idx) => {
