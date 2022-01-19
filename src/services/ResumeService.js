@@ -23,6 +23,7 @@ export const ResumeService = (() => {
     }
 
     const editResume = (id, data) => {
+        data.id = id;
         let resumes = localStorage.getItem('resumes') || "[]";
         resumes = JSON.parse(resumes);
         resumes = resumes.map((r)=> {

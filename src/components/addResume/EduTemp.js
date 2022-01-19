@@ -19,42 +19,10 @@ import {
 } from "@mui/material";
 import { Add, Delete, CheckCircle } from "@mui/icons-material";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
+import { FormFieldService } from "../../services/FormFieldsService";
 
 export const EduTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt, resumeEditData }) => {
-  const minEducation = 2;
-  const eduFields = {
-    school: addResumeForm.getGeneralFieldObj([
-      addResumeForm.validators.required,
-    ]),
-    degree: addResumeForm.getGeneralFieldObj([
-      addResumeForm.validators.required,
-    ]),
-    field: addResumeForm.getGeneralFieldObj(),
-    startDate: addResumeForm.getGeneralFieldObj(
-      [addResumeForm.validators.required],
-      "dateString"
-    ),
-    endDate: addResumeForm.getGeneralFieldObj(
-      [addResumeForm.validators.required],
-      "dateString"
-    ),
-    grade: addResumeForm.getGeneralFieldObj([
-      addResumeForm.validators.required,
-    ]),
-  };
-  const eduList = new Array(resumeEditData?.educations?.length || minEducation).fill(eduFields);
-
-  useEffect((e) => {
-    if (resumeFormFields?.educations?.length) return;
-    let copyResumeFormFields = JSON.parse(JSON.stringify(resumeFormFields));
-    copyResumeFormFields["educations"] = eduList;
-    addResumeForm.setState(copyResumeFormFields);
-    console.log("resumeFormFields.educations ::", resumeFormFields.educations);
-    setTimeout(() => {
-      if(resumeEditData) addResumeForm.setValue(resumeEditData);
-    });
-  }, []);
-
+  
   return (
     <div>
       <h2 className="title2">Educations</h2>
@@ -235,14 +203,14 @@ export const EduTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt, resumeE
                     <Tooltip title="Add New Education" placement="bottom">
                       <IconButton
                         onClick={() => {
-                          onAdd(["educations"], eduFields);
+                          onAdd(["educations"], FormFieldService.getFields("educations"));
                         }}
                       >
                         <AddCircleOutlineOutlinedIcon />
                       </IconButton>
                     </Tooltip>
                   )}
-                  {resumeFormFields?.educations?.length > minEducation && (
+                  {resumeFormFields?.educations?.length > FormFieldService.getFieldsMinCount("educations") && (
                     <Tooltip title="Delete Education" placement="bottom">
                       <IconButton
                         onClick={() => {

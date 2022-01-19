@@ -1,4 +1,5 @@
 let resumeFormFields, setResumeFormFields;
+
 /* validation - start */
 const validateInput = (value, validators) => {
   let errors = [];
@@ -40,12 +41,17 @@ const validators = {
 
 /* form operations - start */
 
-const date = new Date();
-const d = date.getDate(),
-  m = date.getMonth() + 1,
-  y = date.getFullYear();
-const dateString =
-  "" + y + "-" + (m <= 9 ? "0" + m : m) + "-" + (d <= 9 ? "0" + d : d);
+
+
+const getDateString = (dtStr) => {
+  const date = (dtStr && dtStr !== "undefined") ? new Date(dtStr) : new Date();
+  const d = date.getDate(),
+    m = date.getMonth() + 1,
+    y = date.getFullYear();
+  const dateString =
+    "" + y + "-" + (m <= 9 ? "0" + m : m) + "-" + (d <= 9 ? "0" + d : d);
+  return dateString;
+}
 
 const generalFieldObj = {
   value: "",
@@ -55,7 +61,7 @@ const generalFieldObj = {
 };
 const getGeneralFieldObj = (validators, value) => {
   let gfo = JSON.parse(JSON.stringify(generalFieldObj));
-  gfo.value = value ?  value === "dateString" ? dateString : value : "";
+  gfo.value = value ?  (typeof(value) == "string" && value.includes("dateString")) ? getDateString(value.split("|")[1]) : value : "";
   gfo.validators = validators;
   return gfo;
 };
@@ -150,7 +156,7 @@ const getValue = () => {
   return formCopy;
 }
 
-const setValue = (resumeEditData) => {
+const setValue = (resumeEditData, objName) => {
   console.log("setValue :: resumeFormFields ::", resumeFormFields);
   let formCopy = JSON.parse(JSON.stringify(resumeFormFields));
   let dataCopy = JSON.parse(JSON.stringify(resumeEditData));
@@ -158,15 +164,17 @@ const setValue = (resumeEditData) => {
     for(let i in formObj){
       let v = formObj[i];
       let dataValue = dataObj[i];
-      if(typeof formObj[i] === "object" && Object.keys(formObj[i]).includes("dirty")){
-        //formObj[i] = formObj[i].value;
-        if(formObj['current'] && i === "endDate") formObj[i].disabled = true;
-        formObj[i].value = dataObj[i];
-      } else if(typeof v === "object") {
-        iterate(v, dataValue);
-      } else {
-        console.log("v :: ", v);
-        console.log("dataValue :: ", dataValue);
+      if(dataValue){
+        if(typeof formObj[i] === "object" && Object.keys(formObj[i]).includes("dirty")){
+          //formObj[i] = formObj[i].value;
+          if(formObj['current'] && i === "endDate") formObj[i].disabled = true;
+          formObj[i].value = dataObj[i];
+        } else if(typeof v === "object") {
+          iterate(v, dataValue);
+        } else {
+          console.log("v :: ", v);
+          console.log("dataValue :: ", dataValue);
+        }
       }
     }
   }

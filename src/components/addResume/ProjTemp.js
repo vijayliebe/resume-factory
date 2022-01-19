@@ -20,47 +20,10 @@ import {
 } from "@mui/material";
 import { Add, Delete, CheckCircle } from "@mui/icons-material";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
+import { FormFieldService } from "../../services/FormFieldsService";
 
 export const ProjTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt, resumeEditData }) => {
-  const minProject = 1;
-  const projFields = {
-    name: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
-    company: addResumeForm.getGeneralFieldObj([
-      addResumeForm.validators.required,
-    ]),
-    url: addResumeForm.getGeneralFieldObj([
-      addResumeForm.validators.required,
-      addResumeForm.validators.url,
-    ]),
-    startDate: addResumeForm.getGeneralFieldObj(
-      [addResumeForm.validators.required],
-      "dateString"
-    ),
-    endDate: addResumeForm.getGeneralFieldObj(
-      [addResumeForm.validators.required],
-      "dateString"
-    ),
-    desc: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
-    tech: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
-    roles: addResumeForm.getGeneralFieldObj([
-      addResumeForm.validators.required,
-    ]),
-    current: addResumeForm.getGeneralFieldObj([], false)
-  };
-  const projList = new Array(resumeEditData?.projects?.length || minProject).fill(projFields);
-
-  useEffect((e) => {
-    if(resumeFormFields?.projects?.length) return;
-    let copyResumeFormFields = JSON.parse(JSON.stringify(resumeFormFields));
-    copyResumeFormFields["projects"] = projList;
-    addResumeForm.setState(copyResumeFormFields);
-    console.log("resumeFormFields.projects ::", resumeFormFields.projects);
-
-    setTimeout(() => {
-      if(resumeEditData) addResumeForm.setValue(resumeEditData);
-    });
-  }, []);
-
+  
   return (
     <div>
       <h2 className="title2">Projects</h2>
@@ -324,14 +287,14 @@ export const ProjTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt, resume
                     <Tooltip title="Add New Project" placement="bottom">
                       <IconButton
                         onClick={() => {
-                          onAdd(["projects"], projFields);
+                          onAdd(["projects"], FormFieldService.getFields("projects"));
                         }}
                       >
                         <AddCircleOutlineOutlinedIcon />
                       </IconButton>
                     </Tooltip>
                   )}
-                  {resumeFormFields?.projects?.length > minProject && (
+                  {resumeFormFields?.projects?.length > FormFieldService.getFieldsMinCount("projects") && (
                     <Tooltip title="Delete Project" placement="bottom">
                       <IconButton
                         onClick={() => {

@@ -34,6 +34,7 @@ import { EduTemp } from "./EduTemp";
 import { ProjTemp } from "./ProjTemp";
 import { LangTemp } from "./LangTemp";
 import { CertTemp } from "./CertTemp";
+import { FormFieldService } from "../../services/FormFieldsService";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
@@ -113,9 +114,15 @@ export const AddResume = (props) => {
   const minExp = 1;
 
   useEffect(() => {
-    console.log("resumeFormFields :: useEffect :: resumeEditData ::", props.resumeEditData);
-    console.log("resumeFormFields :: useEffect :: resumeFormFields ::", resumeFormFields);
-    if(props.resumeEditData) addResumeForm.setValue(props.resumeEditData);
+    console.log(
+      "resumeFormFields :: useEffect :: resumeEditData ::",
+      props.resumeEditData
+    );
+    console.log(
+      "resumeFormFields :: useEffect :: resumeFormFields ::",
+      resumeFormFields
+    );
+    if (props.resumeEditData) addResumeForm.setValue(props.resumeEditData);
   }, []);
 
   /* form operations - start */
@@ -147,12 +154,14 @@ export const AddResume = (props) => {
       roles: addResumeForm.getGeneralFieldObj([
         addResumeForm.validators.required,
       ]),
-      current: addResumeForm.getGeneralFieldObj([], false)
+      current: addResumeForm.getGeneralFieldObj([], false),
     },
   };
 
   const generalFields = {
-    resumeName: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
+    resumeName: addResumeForm.getGeneralFieldObj([
+      addResumeForm.validators.required,
+    ]),
     name: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
     title: addResumeForm.getGeneralFieldObj([
       addResumeForm.validators.required,
@@ -177,19 +186,27 @@ export const AddResume = (props) => {
   };
 
   const technicalSkillFields = {
-    skills: new Array(props.resumeEditData?.technicalSkills?.length || minTechnicalSkills).fill(
+    skills: new Array(
+      props.resumeEditData?.technicalSkills?.length || minTechnicalSkills
+    ).fill(
       addResumeForm.getGeneralFieldObj([addResumeForm.validators.required])
     ),
-    ratings: new Array(props.resumeEditData?.technicalSkills?.length || minTechnicalSkills).fill(
+    ratings: new Array(
+      props.resumeEditData?.technicalSkills?.length || minTechnicalSkills
+    ).fill(
       addResumeForm.getGeneralFieldObj([addResumeForm.validators.required], 1)
     ),
   };
 
   const professionalSkillFields = {
-    skills: new Array(props.resumeEditData?.professionalSkills?.length || minProfessionalSkills).fill(
+    skills: new Array(
+      props.resumeEditData?.professionalSkills?.length || minProfessionalSkills
+    ).fill(
       addResumeForm.getGeneralFieldObj([addResumeForm.validators.required])
     ),
-    ratings: new Array(props.resumeEditData?.professionalSkills?.length || minProfessionalSkills).fill(
+    ratings: new Array(
+      props.resumeEditData?.professionalSkills?.length || minProfessionalSkills
+    ).fill(
       addResumeForm.getGeneralFieldObj([addResumeForm.validators.required], 1)
     ),
   };
@@ -201,11 +218,11 @@ export const AddResume = (props) => {
     technicalSkills: technicalSkillFields,
     professionalSkills: professionalSkillFields,
     experiences: experiencesFields,
-    educations: [],
-    projects: [],
-    certificates: [],
-    languages: {},
-    template: {}
+    educations: FormFieldService.getFieldList("educations"),
+    projects: FormFieldService.getFieldList("projects"),
+    certificates: FormFieldService.getFieldList("certificates"),
+    languages: FormFieldService.getFieldList("languages"),
+    template: {},
   };
 
   const [resumeFormFields, setResumeFormFields] = useState(resumeFormFieldsObj);
@@ -269,39 +286,43 @@ export const AddResume = (props) => {
   };
 
   const onFormSubmit = (id) => {
-    console.log("onFormSubmit :: resumeFormFields :: id :: ", resumeFormFields, id);
+    console.log(
+      "onFormSubmit :: resumeFormFields :: id :: ",
+      resumeFormFields,
+      id
+    );
+    const payload = addResumeForm.getValue();
 
-    if (activeSection === tabs[tabs.length - 1]) {
-      // save
-      const errorTab = [];
-      const tabErrors = JSON.parse(JSON.stringify(tabList));
-      for(let tab in tabErrors){
-        const error = !addResumeForm.isFormValid(tab)
-        if(error){
-          errorTab.push(tab);
-          tabErrors[tab] = error;
-          break;
-        }
-      }
-
-      console.log("onFormSubmit :: errorTab ::", errorTab);
-
-      if(errorTab.length){
-        setActiveSection(errorTab[0]);
-      } else {
-        const payload = addResumeForm.getValue();
-        console.log("onFormSubmit :: payload ::", payload);
-        if(id){
-          ResumeService.editResume(id, payload);
-        } else {
-          ResumeService.saveResume(payload);
-        }
-        props.closeForm();
-      }
-      
+    if (id) {
+      ResumeService.editResume(id, payload);
+      props.closeForm();
     } else {
-      if(addResumeForm.isFormValid(activeSection)){
-        setActiveSection(tabs[tabs.indexOf(activeSection) + 1]);
+      if (activeSection === tabs[tabs.length - 1]) {
+        // save
+        const errorTab = [];
+        const tabErrors = JSON.parse(JSON.stringify(tabList));
+        for (let tab in tabErrors) {
+          const error = !addResumeForm.isFormValid(tab);
+          if (error) {
+            errorTab.push(tab);
+            tabErrors[tab] = error;
+            break;
+          }
+        }
+
+        console.log("onFormSubmit :: errorTab ::", errorTab);
+
+        if (errorTab.length) {
+          setActiveSection(errorTab[0]);
+        } else {
+          console.log("onFormSubmit :: payload ::", payload);
+          ResumeService.saveResume(payload);
+          props.closeForm();
+        }
+      } else {
+        if (addResumeForm.isFormValid(activeSection)) {
+          setActiveSection(tabs[tabs.indexOf(activeSection) + 1]);
+        }
       }
     }
   };
@@ -323,7 +344,9 @@ export const AddResume = (props) => {
         <CloseIcon />
       </IconButton>
       <div style={addResumeCont.main}>
-        <h1 className="title1">{props.resumeEditData ? 'Edit' : 'Add'}  Resume </h1>
+        <h1 className="title1">
+          {props.resumeEditData ? "Edit" : "Add"} Resume{" "}
+        </h1>
         {/* <h3 className="title2"> {props.resumeEditData ?  props.resumeEditData?.general?.resumeName : ''}</h3> */}
         <hr></hr>
 
@@ -384,7 +407,8 @@ export const AddResume = (props) => {
                               ]);
                             }}
                             error={
-                              resumeFormFields.general.resumeName.errors.length == 0
+                              resumeFormFields.general.resumeName.errors
+                                .length == 0
                                 ? false
                                 : true
                             }
@@ -859,7 +883,7 @@ export const AddResume = (props) => {
               {activeSection === "experiences" && (
                 <>
                   <h2 className="title2">Experience </h2>
-                  
+
                   {resumeFormFields.experiences.map((experience, i) => {
                     const expDiv = (
                       <Card key={"exp_" + i} className="card-container">
@@ -869,24 +893,26 @@ export const AddResume = (props) => {
                               {"#EXPERIENCE : " + (i + 1)}
                             </div>
                             <div>
-                              <Checkbox className="checkBox-pad"
-                                {... { inputProps: { 'aria-label': 'Checkbox demo' } }}
+                              <Checkbox
+                                className="checkBox-pad"
+                                {...{
+                                  inputProps: { "aria-label": "Checkbox demo" },
+                                }}
                                 sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
                                 checked={experience.current.value}
-                                onChange={(e)=>{
+                                onChange={(e) => {
                                   addResumeForm.onFormFieldChange(e, [
                                     "experiences",
                                     i,
                                     "current",
                                   ]);
                                   setTimeout(() => {
-                                    addResumeForm.onFormFieldChange(e, [
-                                      "experiences",
-                                      i,
-                                      "endDate",
-                                    ], e.target.checked);
+                                    addResumeForm.onFormFieldChange(
+                                      e,
+                                      ["experiences", i, "endDate"],
+                                      e.target.checked
+                                    );
                                   });
-                                  
                                 }}
                               />
                               <span>Presently Working</span>
@@ -1242,13 +1268,29 @@ export const AddResume = (props) => {
           style={addResumeCont.submitBtn}
           size="large"
           variant="contained"
-          color="success"
+          color={
+            activeSection === tabs[tabs.length - 1] ? "success" : "primary"
+          }
           onClick={() => {
             onFormSubmit(props?.resumeEditData?.id);
           }}
         >
           {activeSection === tabs[tabs.length - 1] ? "SAVE" : "NEXT"}
         </Button>
+        {props?.resumeEditData?.id && activeSection !== tabs[tabs.length - 1] && (
+          <Button
+            className="pr"
+            style={addResumeCont.submitBtn}
+            size="large"
+            variant="contained"
+            color="success"
+            onClick={() => {
+              onFormSubmit(props?.resumeEditData?.id);
+            }}
+          >
+            SAVE
+          </Button>
+        )}
       </div>
     </Dialog>
   );

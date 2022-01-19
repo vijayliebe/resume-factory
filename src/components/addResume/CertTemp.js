@@ -19,36 +19,9 @@ import {
 } from "@mui/material";
 import { Add, Delete, CheckCircle } from "@mui/icons-material";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
+import { FormFieldService } from "../../services/FormFieldsService";
 
 export const CertTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt, resumeEditData }) => {
-  const minCert = 1;
-  const certFields = {
-    name: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
-    org: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
-    startDate: addResumeForm.getGeneralFieldObj(
-      [addResumeForm.validators.required],
-      "dateString"
-    ),
-    endDate: addResumeForm.getGeneralFieldObj([], "dateString"),
-    cid: addResumeForm.getGeneralFieldObj(),
-    url: addResumeForm.getGeneralFieldObj([addResumeForm.validators.url]),
-  };
-  const certList = new Array(resumeEditData?.certificates?.length || minCert).fill(certFields);
-
-  useEffect((e) => {
-    if(resumeFormFields?.certificates?.length) return;
-    let copyResumeFormFields = JSON.parse(JSON.stringify(resumeFormFields));
-    copyResumeFormFields["certificates"] = certList;
-    addResumeForm.setState(copyResumeFormFields);
-    console.log(
-      "resumeFormFields.certificates ::",
-      resumeFormFields.certificates
-    );
-
-    setTimeout(() => {
-      if(resumeEditData) addResumeForm.setValue(resumeEditData);
-    });
-  }, []);
 
   return (
     <div>
@@ -62,7 +35,7 @@ export const CertTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt, resume
                     >
                       <IconButton
                         onClick={() => {
-                          onAdd(["certificates"], certFields);
+                          onAdd(["certificates"], FormFieldService.getFields("certificates"));
                         }}
                       >
                         <AddCircleOutlineOutlinedIcon />
@@ -250,14 +223,14 @@ export const CertTemp = ({ addResumeForm, resumeFormFields, onAdd, onDlt, resume
                     >
                       <IconButton
                         onClick={() => {
-                          onAdd(["certificates"], certFields);
+                          onAdd(["certificates"], FormFieldService.getFields("certificates"));
                         }}
                       >
                         <AddCircleOutlineOutlinedIcon />
                       </IconButton>
                     </Tooltip>
                   )}
-                  {/* {resumeFormFields?.certificates?.length > minCert && ( */}
+                  {/* {resumeFormFields?.certificates?.length > FormFieldService.getFieldsMinCount("certificates") && ( */}
                     <Tooltip
                       title="Delete Certificate or Licence"
                       placement="bottom"

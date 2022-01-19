@@ -19,6 +19,7 @@ import {
 } from "@mui/material";
 import { Add, Delete, CheckCircle } from "@mui/icons-material";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
+import { FormFieldService } from "../../services/FormFieldsService";
 
 export const LangTemp = ({
   addResumeForm,
@@ -28,26 +29,6 @@ export const LangTemp = ({
   onDlt,
   resumeEditData
 }) => {
-  const minLangs = 2;
-  const langFields = {
-    lang: new Array(resumeEditData?.languages?.length || minLangs).fill(
-      addResumeForm.getGeneralFieldObj([addResumeForm.validators.required])
-    ),
-    ratings: new Array(resumeEditData?.languages?.length || minLangs).fill(
-      addResumeForm.getGeneralFieldObj([addResumeForm.validators.required], 1)
-    ),
-  };
-
-  useEffect((e) => {
-    if (resumeFormFields?.languages?.length) return;
-    let copyResumeFormFields = JSON.parse(JSON.stringify(resumeFormFields));
-    copyResumeFormFields["languages"] = langFields;
-    addResumeForm.setState(copyResumeFormFields);
-
-    setTimeout(() => {
-      if(resumeEditData) addResumeForm.setValue(resumeEditData);
-    });
-  }, []);
 
   return (
     <div>
@@ -125,7 +106,7 @@ export const LangTemp = ({
                         </IconButton>
                       </Tooltip>
                     )}
-                    {resumeFormFields?.languages?.lang.length > minLangs && (
+                    {resumeFormFields?.languages?.lang.length > FormFieldService.getFieldsMinCount("languages") && (
                       <Tooltip title="Delete Language" placement="bottom">
                         <IconButton
                           onClick={() => {
