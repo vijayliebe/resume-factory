@@ -46,12 +46,27 @@ export const ResumeService = (() => {
         localStorage.setItem('resumes', JSON.stringify(resumes));
     }
 
+    const uploadResume = (data) => {
+        let resumes = localStorage.getItem('resumes') || "[]";
+        resumes = JSON.parse(resumes);
+
+        if(Array.isArray(data)){
+          resumes = [...resumes, ...data];
+        } else {
+          resumes.push(data);
+        }
+
+        localStorage.setItem('resumes', JSON.stringify(resumes));
+        return resumes;
+    }
+
     
     return {
         getResumes,
         getResumeById,
         saveResume,
         editResume,
-        dltResume
+        dltResume,
+        uploadResume
     }
 })()

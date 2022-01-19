@@ -42,7 +42,7 @@ code {
 }
 
 .mr5 {
-  margin-right: 5px;
+  margin-right: 5px !important;
 }
 
 .mb5 {

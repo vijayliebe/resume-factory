@@ -9,11 +9,16 @@
   font-weight: bold;
 }
 
-.checkBox-pad{
+.checkBox-pad {
   padding-top: 3px !important;
   padding-left: 0 !important;
 }
 
-
-
-
+#File1 {
+  height: 2.7em;
+  border: none;
+  background-color: blue;
+  border-radius: 5px;
+  width: 8%;
+  text-align: center;
+}

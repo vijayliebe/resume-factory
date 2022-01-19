@@ -108,7 +108,7 @@ export const AddResume = (props) => {
     templates: "Templates",
   };
   const tabs = Object.keys(tabList);
-  const [activeSection, setActiveSection] = useState("general");
+  const [activeSection, setActiveSection] = useState(props.activeSection || "general");
   const minTechnicalSkills = 4;
   const minProfessionalSkills = 2;
   const minExp = 1;
