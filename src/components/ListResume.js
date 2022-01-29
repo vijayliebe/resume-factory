@@ -52,13 +52,16 @@ export const ListResume = (props) => {
   };
 
   const deleteResume = (idx) => {
-    console.log(
-      "deleteResume btn clicked :: idx :: ",
-      idx,
-      props?.resumes?.[idx]
-    );
-    ResumeService.dltResume(props?.resumes?.[idx]?.id);
-    props.fetchResumes();
+    let confirmResult = window.confirm(`Are you sure to delete resule - ${props?.resumes?.[idx]?.general.resumeName}`);
+    if(confirmResult){
+      console.log(
+        "deleteResume btn clicked :: idx :: ",
+        idx,
+        props?.resumes?.[idx]
+      );
+      ResumeService.dltResume(props?.resumes?.[idx]?.id);
+      props.fetchResumes();
+    }
   };
 
   const editResume = (idx) => {

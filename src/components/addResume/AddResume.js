@@ -1262,22 +1262,21 @@ export const AddResume = (props) => {
             </form>
           </Grid>
         </Grid>
-
+        {activeSection !== tabs[tabs.length - 1] && ( 
         <Button
           className="pr"
           style={addResumeCont.submitBtn}
           size="large"
           variant="contained"
-          color={
-            activeSection === tabs[tabs.length - 1] ? "success" : "primary"
-          }
+          color="primary"
           onClick={() => {
-            onFormSubmit(props?.resumeEditData?.id);
+            onFormSubmit();
           }}
         >
-          {activeSection === tabs[tabs.length - 1] ? "SAVE" : "NEXT"}
+          NEXT
         </Button>
-        {props?.resumeEditData?.id && activeSection !== tabs[tabs.length - 1] && (
+        )}
+        {(props?.resumeEditData?.id || activeSection == tabs[tabs.length - 1]) && (
           <Button
             className="pr"
             style={addResumeCont.submitBtn}
@@ -1290,7 +1289,7 @@ export const AddResume = (props) => {
           >
             SAVE
           </Button>
-        )}
+         )}
       </div>
     </Dialog>
   );
