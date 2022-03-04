@@ -160,7 +160,7 @@ export const ResumeTemplate = ({
         >
           <CloseIcon />
         </IconButton>
-        <ResumePreview selectedResumeTemp={resumeFormFields.template} />
+        <ResumePreview selectedResumeTemp={resumeFormFields.template} addResumeForm={addResumeForm}/>
       </Dialog>
     </>
   );

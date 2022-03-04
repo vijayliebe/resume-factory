@@ -109,9 +109,26 @@ export const AddResume = (props) => {
   };
   const tabs = Object.keys(tabList);
   const [activeSection, setActiveSection] = useState(props.activeSection || "general");
-  const minTechnicalSkills = 4;
-  const minProfessionalSkills = 2;
-  const minExp = 1;
+
+  /* form operations - start */
+  const addResumeForm = FormService;
+
+  const resumeFormFieldsObj = {
+    general: FormFieldService.getFieldList("general"),
+    technicalSkills: FormFieldService.getFieldList("technicalSkills", props?.resumeEditData),
+    professionalSkills: FormFieldService.getFieldList("professionalSkills", props?.resumeEditData),
+    experiences: FormFieldService.getFieldList("experiences", props?.resumeEditData?.experiences?.length),
+    educations: FormFieldService.getFieldList("educations", props?.resumeEditData?.educations?.length),
+    projects: FormFieldService.getFieldList("projects", props?.resumeEditData?.projects?.length),
+    certificates: FormFieldService.getFieldList("certificates", props?.resumeEditData?.certificates?.length),
+    languages: FormFieldService.getFieldList("languages", props?.resumeEditData),
+    template: {},
+  };
+
+  const [resumeFormFields, setResumeFormFields] = useState(resumeFormFieldsObj);
+  addResumeForm.init(resumeFormFields, setResumeFormFields);
+
+  /* form operations - end */
 
   useEffect(() => {
     console.log(
@@ -122,114 +139,12 @@ export const AddResume = (props) => {
       "resumeFormFields :: useEffect :: resumeFormFields ::",
       resumeFormFields
     );
-    if (props.resumeEditData) addResumeForm.setValue(props.resumeEditData);
+
+    if (props.resumeEditData) {
+      addResumeForm.setValue(props.resumeEditData);
+    }
   }, []);
 
-  /* form operations - start */
-  const addResumeForm = FormService;
-
-  const fieldsmap = {
-    experiences: {
-      title: addResumeForm.getGeneralFieldObj([
-        addResumeForm.validators.required,
-      ]),
-      employmentType: addResumeForm.getGeneralFieldObj(
-        [addResumeForm.validators.required],
-        "fullTime"
-      ),
-      company: addResumeForm.getGeneralFieldObj([
-        addResumeForm.validators.required,
-      ]),
-      location: addResumeForm.getGeneralFieldObj([
-        addResumeForm.validators.required,
-      ]),
-      startDate: addResumeForm.getGeneralFieldObj(
-        [addResumeForm.validators.required],
-        "dateString"
-      ),
-      endDate: addResumeForm.getGeneralFieldObj(
-        [addResumeForm.validators.required],
-        "dateString"
-      ),
-      roles: addResumeForm.getGeneralFieldObj([
-        addResumeForm.validators.required,
-      ]),
-      current: addResumeForm.getGeneralFieldObj([], false),
-    },
-  };
-
-  const generalFields = {
-    resumeName: addResumeForm.getGeneralFieldObj([
-      addResumeForm.validators.required,
-    ]),
-    name: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
-    title: addResumeForm.getGeneralFieldObj([
-      addResumeForm.validators.required,
-    ]),
-    about: addResumeForm.getGeneralFieldObj([
-      addResumeForm.validators.required,
-    ]),
-    phone: addResumeForm.getGeneralFieldObj([
-      addResumeForm.validators.required,
-    ]),
-    email: addResumeForm.getGeneralFieldObj([
-      addResumeForm.validators.required,
-      addResumeForm.validators.email,
-    ]),
-    linkedIn: addResumeForm.getGeneralFieldObj([
-      addResumeForm.validators.required,
-      addResumeForm.validators.url,
-    ]),
-    location: addResumeForm.getGeneralFieldObj([
-      addResumeForm.validators.required,
-    ]),
-  };
-
-  const technicalSkillFields = {
-    skills: new Array(
-      props.resumeEditData?.technicalSkills?.length || minTechnicalSkills
-    ).fill(
-      addResumeForm.getGeneralFieldObj([addResumeForm.validators.required])
-    ),
-    ratings: new Array(
-      props.resumeEditData?.technicalSkills?.length || minTechnicalSkills
-    ).fill(
-      addResumeForm.getGeneralFieldObj([addResumeForm.validators.required], 1)
-    ),
-  };
-
-  const professionalSkillFields = {
-    skills: new Array(
-      props.resumeEditData?.professionalSkills?.length || minProfessionalSkills
-    ).fill(
-      addResumeForm.getGeneralFieldObj([addResumeForm.validators.required])
-    ),
-    ratings: new Array(
-      props.resumeEditData?.professionalSkills?.length || minProfessionalSkills
-    ).fill(
-      addResumeForm.getGeneralFieldObj([addResumeForm.validators.required], 1)
-    ),
-  };
-
-  const experiencesFields = [fieldsmap.experiences];
-
-  const resumeFormFieldsObj = {
-    general: generalFields,
-    technicalSkills: technicalSkillFields,
-    professionalSkills: professionalSkillFields,
-    experiences: experiencesFields,
-    educations: FormFieldService.getFieldList("educations"),
-    projects: FormFieldService.getFieldList("projects"),
-    certificates: FormFieldService.getFieldList("certificates"),
-    languages: FormFieldService.getFieldList("languages"),
-    template: {},
-  };
-
-  const [resumeFormFields, setResumeFormFields] = useState(resumeFormFieldsObj);
-  addResumeForm.init(resumeFormFields, setResumeFormFields);
-  // console.log("resumeFormFields ::", resumeFormFields);
-
-  /* form operations - end */
 
   const onAdd = (formNames, fieldsmapObj) => {
     let copyResumeFormFields = JSON.parse(JSON.stringify(resumeFormFields));
@@ -741,7 +656,7 @@ export const AddResume = (props) => {
                                   </Tooltip>
                                 )}
                                 {resumeFormFields.technicalSkills.skills
-                                  .length > minTechnicalSkills && (
+                                  .length > FormFieldService.getFieldsMinCount("technicalSkills") && (
                                   <Tooltip
                                     title="Delete Skill"
                                     placement="bottom"
@@ -853,7 +768,7 @@ export const AddResume = (props) => {
                                     </Tooltip>
                                   )}
                                   {resumeFormFields.professionalSkills.skills
-                                    .length > minProfessionalSkills && (
+                                    .length > FormFieldService.getFieldsMinCount("professionalSkills") && (
                                     <Tooltip
                                       title="Delete Skill"
                                       placement="bottom"
@@ -1175,7 +1090,7 @@ export const AddResume = (props) => {
                                       onClick={() => {
                                         onAdd(
                                           ["experiences"],
-                                          fieldsmap["experiences"]
+                                          FormFieldService.getFields("experiences")
                                         );
                                       }}
                                     >
@@ -1184,7 +1099,7 @@ export const AddResume = (props) => {
                                   </Tooltip>
                                 )}
                                 {resumeFormFields.experiences.length >
-                                  minExp && (
+                                  FormFieldService.getFieldsMinCount("experiences") && (
                                   <Tooltip
                                     title="Delete Skill"
                                     placement="bottom"

@@ -2,14 +2,100 @@ import { FormService } from "./FormService";
 const addResumeForm = FormService;
 
 const fieldsMinCount = {
-  "educations": 2,
-  "projects": 1,
-  "certificates": 1,
-  "languages": 2
-}
+  technicalSkills: 4,
+  professionalSkills: 2,
+  experiences: 1,
+  educations: 2,
+  projects: 1,
+  certificates: 1,
+  languages: 2,
+};
 
 const fields = {
-  "educations": {
+  general: {
+    resumeName: addResumeForm.getGeneralFieldObj([
+      addResumeForm.validators.required,
+    ]),
+    name: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
+    title: addResumeForm.getGeneralFieldObj([
+      addResumeForm.validators.required,
+    ]),
+    about: addResumeForm.getGeneralFieldObj([
+      addResumeForm.validators.required,
+    ]),
+    phone: addResumeForm.getGeneralFieldObj([
+      addResumeForm.validators.required,
+    ]),
+    email: addResumeForm.getGeneralFieldObj([
+      addResumeForm.validators.required,
+      addResumeForm.validators.email,
+    ]),
+    linkedIn: addResumeForm.getGeneralFieldObj([
+      addResumeForm.validators.required,
+      addResumeForm.validators.url,
+    ]),
+    location: addResumeForm.getGeneralFieldObj([
+      addResumeForm.validators.required,
+    ]),
+  },
+  technicalSkills: (resumeEditData) => {
+    return {
+      skills: new Array(
+        resumeEditData?.technicalSkills?.ratings?.length || fieldsMinCount.technicalSkills
+      ).fill(
+        addResumeForm.getGeneralFieldObj([addResumeForm.validators.required])
+      ),
+      ratings: new Array(
+        resumeEditData?.technicalSkills?.ratings?.length || fieldsMinCount.technicalSkills
+      ).fill(
+        addResumeForm.getGeneralFieldObj([addResumeForm.validators.required], 1)
+      ),
+    };
+  },
+  professionalSkills: (resumeEditData) => {
+    return {
+      skills: new Array(
+        resumeEditData?.professionalSkills?.ratings?.length ||
+        fieldsMinCount.professionalSkills
+      ).fill(
+        addResumeForm.getGeneralFieldObj([addResumeForm.validators.required])
+      ),
+      ratings: new Array(
+        resumeEditData?.professionalSkills?.ratings?.length ||
+        fieldsMinCount.professionalSkills
+      ).fill(
+        addResumeForm.getGeneralFieldObj([addResumeForm.validators.required], 1)
+      ),
+    };
+  },
+  experiences: {
+    title: addResumeForm.getGeneralFieldObj([
+      addResumeForm.validators.required,
+    ]),
+    employmentType: addResumeForm.getGeneralFieldObj(
+      [addResumeForm.validators.required],
+      "fullTime"
+    ),
+    company: addResumeForm.getGeneralFieldObj([
+      addResumeForm.validators.required,
+    ]),
+    location: addResumeForm.getGeneralFieldObj([
+      addResumeForm.validators.required,
+    ]),
+    startDate: addResumeForm.getGeneralFieldObj(
+      [addResumeForm.validators.required],
+      "dateString"
+    ),
+    endDate: addResumeForm.getGeneralFieldObj(
+      [addResumeForm.validators.required],
+      "dateString"
+    ),
+    roles: addResumeForm.getGeneralFieldObj([
+      addResumeForm.validators.required,
+    ]),
+    current: addResumeForm.getGeneralFieldObj([], false),
+  },
+  educations: {
     school: addResumeForm.getGeneralFieldObj([
       addResumeForm.validators.required,
     ]),
@@ -29,7 +115,7 @@ const fields = {
       addResumeForm.validators.required,
     ]),
   },
-  "projects": {
+  projects: {
     name: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
     company: addResumeForm.getGeneralFieldObj([
       addResumeForm.validators.required,
@@ -51,9 +137,9 @@ const fields = {
     roles: addResumeForm.getGeneralFieldObj([
       addResumeForm.validators.required,
     ]),
-    current: addResumeForm.getGeneralFieldObj([], false)
+    current: addResumeForm.getGeneralFieldObj([], false),
   },
-  "certificates":{
+  certificates: {
     name: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
     org: addResumeForm.getGeneralFieldObj([addResumeForm.validators.required]),
     startDate: addResumeForm.getGeneralFieldObj(
@@ -64,31 +150,44 @@ const fields = {
     cid: addResumeForm.getGeneralFieldObj(),
     url: addResumeForm.getGeneralFieldObj([addResumeForm.validators.url]),
   },
-  "languages": {
-    lang: new Array(fieldsMinCount.languages).fill(
-      addResumeForm.getGeneralFieldObj([addResumeForm.validators.required])
-    ),
-    ratings: new Array(fieldsMinCount.languages).fill(
-      addResumeForm.getGeneralFieldObj([addResumeForm.validators.required], 1)
-    ),
-  }
-}
+  languages: (resumeEditData) => {
+    return {
+      lang: new Array(
+        resumeEditData?.languages?.ratings?.length || fieldsMinCount.languages
+      ).fill(
+        addResumeForm.getGeneralFieldObj([addResumeForm.validators.required])
+      ),
+      ratings: new Array(
+        resumeEditData?.languages?.ratings?.length || fieldsMinCount.languages
+      ).fill(
+        addResumeForm.getGeneralFieldObj([addResumeForm.validators.required], 1)
+      ),
+    };
+  },
+};
 const getFieldsMinCount = (name) => {
-    return fieldsMinCount[name];
-}
-const getFields = (name) => {
+  return fieldsMinCount[name];
+};
+const getFields = (name, resumeEditData) => {
+  //console.log("getFields :: name ::", name);
+  if (resumeEditData) {
+    return fields[name](resumeEditData);
+  } else {
     return fields[name];
-}
-const getFieldList = (name) => {
-    if(["languages"].includes(name)){
-        return getFields(name);
-    } else {
-        return new Array(fieldsMinCount[name]).fill(getFields(name));
-    }
-}
+  }
+};
+const getFieldList = (name, data) => {
+  if (["technicalSkills", "professionalSkills", "languages"].includes(name)) {
+    return getFields(name, data);
+  } else if(["general"].includes(name)){
+    return getFields(name);
+  }else {
+    return new Array(data || fieldsMinCount[name]).fill(getFields(name));
+  }
+};
 
 export const FormFieldService = {
-    getFieldsMinCount,
-    getFields,
-    getFieldList
-}
+  getFieldsMinCount,
+  getFields,
+  getFieldList,
+};

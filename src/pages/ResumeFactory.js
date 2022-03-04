@@ -7,6 +7,7 @@ export const ResumeFactory = () => {
 
   const fetchResumes = () => {
     const resumes = ResumeService.getResumes();
+    console.log("fetchResumes :: resumes  ::", resumes);
     setResumes(resumes);
   };
 
