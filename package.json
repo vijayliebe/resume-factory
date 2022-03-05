@@ -28,6 +28,7 @@
   "scripts": {
     "start": "react-scripts start --port=3002",
     "build": "react-scripts build",
+    "build:static": "rm -rf build && react-scripts build && rm -rf ../resume-factory-static/static && rm -rf ../resume-factory-static/images && rm -f ../resume-factory-static/*.* && cp -r build/. ../resume-factory-static/. && cd ../resume-factory-static && git add . && git commit -am 'changes' && git push && cd ../resumeFactory",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

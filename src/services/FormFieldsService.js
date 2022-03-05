@@ -174,7 +174,7 @@ const getFieldsMinCount = (name) => {
 };
 const getFields = (name, resumeEditData) => {
   //console.log("getFields :: name ::", name);
-  if (resumeEditData) {
+  if (["technicalSkills", "professionalSkills", "languages"].includes(name)) {
     return fields[name](resumeEditData);
   } else {
     return fields[name];

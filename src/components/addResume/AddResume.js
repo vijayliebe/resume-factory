@@ -608,7 +608,7 @@ export const AddResume = (props) => {
                   <h2 className="title2">Technical Skills</h2>
                   <Card>
                     <CardContent>
-                      {resumeFormFields.technicalSkills.skills.map((ts, i) => {
+                      {resumeFormFields?.technicalSkills?.skills?.map((ts, i) => {
                         const tsr = resumeFormFields.technicalSkills.ratings[i];
                         const tsdiv = (
                           <Grid
