@@ -60,7 +60,13 @@ export const ModernTemp = (props) => {
     m = date.getMonth() + 1,
     y = date.getFullYear();
 
-    return (monthList[m - 1]+" "+y);
+    const formatMap = {
+      "d-m-y": (d <= 9 ? "0" + d : d) +"-"+ (m <= 9 ? "0" + m : m) +"-"+ y,
+      "m-y": (monthList[m - 1]+" "+y),
+      "y": y
+    }
+    
+    return formatMap[format] || formatMap["m-y"];
   }
 
   return (
@@ -170,7 +176,7 @@ export const ModernTemp = (props) => {
                           </span>
                         </div>
                         <div className="year">
-                          {transformDate(edu.startDate)} - {transformDate(edu.endDate)}
+                          { (transformDate(edu.startDate, "y") == transformDate(edu.endDate, "y")) ? transformDate(edu.endDate, "y") : (transformDate(edu.startDate, "y") +" - "+ transformDate(edu.endDate, "y"))}
                         </div>
                       </div>
                     </div>
@@ -205,7 +211,7 @@ export const ModernTemp = (props) => {
                       {/* <div className="left"> */}
                       <div className="caption">
                         <div className="name">
-                          {i + 1}. {proj.company}
+                          {i + 1}. {proj.name}
                         </div>
                         {proj.url.split(",").map((l) => {
                           return <div className="link">{l}</div>;
@@ -446,7 +452,7 @@ export const ModernTemp = (props) => {
                       <div className="line">
                         <span className="degree">{edu.degree}</span>
                         <span className="year">
-                          ({transformDate(edu.startDate)} - {transformDate(edu.endDate)})
+                          ({ (transformDate(edu.startDate, "y") == transformDate(edu.endDate, "y")) ? transformDate(edu.endDate, "y") : (transformDate(edu.startDate, "y") +" - "+ transformDate(edu.endDate, "y"))})
                         </span>
                       </div>
 
@@ -493,7 +499,7 @@ export const ModernTemp = (props) => {
                     <div className="left">
                       <div className="caption">
                         <div className="name">
-                          {i + 1}. {proj.company}
+                          {i + 1}. {proj.name}
                         </div>
                         {proj.url.split(",").map((l) => {
                           return <div className="link">{l}</div>;
@@ -543,7 +549,7 @@ export const ModernTemp = (props) => {
 
         <div className="footer">
           <div className="left">
-            <div>Date : {transformDate()}</div>
+            <div>Date : {transformDate(null, "d-m-y")}</div>
             <div className="m-t">{props.resumeData.general.location}</div>
           </div>
           <div className="right">

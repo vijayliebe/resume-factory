@@ -125,7 +125,6 @@ const fields = {
       addResumeForm.validators.required,
     ]),
     url: addResumeForm.getGeneralFieldObj([
-      addResumeForm.validators.required,
       addResumeForm.validators.url,
     ]),
     startDate: addResumeForm.getGeneralFieldObj(
