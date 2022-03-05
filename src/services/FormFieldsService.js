@@ -23,6 +23,10 @@ const fields = {
     about: addResumeForm.getGeneralFieldObj([
       addResumeForm.validators.required,
     ]),
+    image: addResumeForm.getGeneralFieldObj([
+      addResumeForm.validators.required,
+      addResumeForm.validators.url
+    ]),
     phone: addResumeForm.getGeneralFieldObj([
       addResumeForm.validators.required,
     ]),

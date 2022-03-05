@@ -255,7 +255,7 @@ export const ModernTemp = (props) => {
 
         <div className="right-cont">
           <div className="photo">
-            <img src="https://media-exp1.licdn.com/dms/image/C4D03AQGMAQ7KhF6WDA/profile-displayphoto-shrink_200_200/0/1601884264839?e=1651708800&v=beta&t=MCej4HgWkWhFkG5KoyqvpgfgdRiLBB37yvde5Rk5D4g" />
+            <img src={props.resumeData.general.image} />
           </div>
 
           <div className="contact-details m-t">

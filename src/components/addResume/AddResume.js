@@ -431,6 +431,36 @@ export const AddResume = (props) => {
                             fullWidth
                           />
                         </Grid>
+                        <Grid item xs={12} md={12} sx={12}>
+                          <TextField
+                            id="image"
+                            label="Image Url"
+                            placeholder="Provide Image url"
+                            variant="outlined"
+                            value={resumeFormFields.general.image.value}
+                            onChange={(e) => {
+                              addResumeForm.onFormFieldChange(e, [
+                                "general",
+                                "image",
+                              ]);
+                            }}
+                            onBlur={(e) => {
+                              addResumeForm.onFormFieldChange(e, [
+                                "general",
+                                "image",
+                              ]);
+                            }}
+                            error={
+                              resumeFormFields.general.image.errors.length == 0
+                                ? false
+                                : true
+                            }
+                            helperText={resumeFormFields.general.image.errors.join(
+                              "\n"
+                            )}
+                            fullWidth
+                          />
+                        </Grid>
                       </Grid>
                     </CardContent>
                   </Card>
