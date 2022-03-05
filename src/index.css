@@ -150,7 +150,9 @@ code {
   font-weight: 400;
   font-size: 0.75em;
 }
-
+.temp-img{
+  width: 65%;
+}
 .card-container {
   padding-top: 15px;
   margin-bottom: 15px;

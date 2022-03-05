@@ -45,11 +45,11 @@ export const ResumeTemplate = ({
   };
 
   const _resumeTemplates = [
-    {
-      id: 0,
-      name: "Professional",
-      image: "resume_temp_1.jpeg",
-    },
+    // {
+    //   id: 0,
+    //   name: "Professional",
+    //   image: "resume_temp_1.jpeg",
+    // },
     {
       id: 1,
       name: "Modern",
@@ -111,7 +111,7 @@ export const ResumeTemplate = ({
                   sx={2}
                 >
                   <img
-                    className=""
+                    className="temp-img"
                     src={"images/" + rt.image}
                     alt={rt.name}
                     loading="lazy"

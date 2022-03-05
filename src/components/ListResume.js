@@ -122,6 +122,10 @@ export const ListResume = (props) => {
     setActiveSection("templates");
     setShowAddResume(true);
   };
+
+  const fileUpload = () => {
+    document.getElementById("File1").click();
+  }
   return (
     <>
       <div style={styles.addResume}>
@@ -143,6 +147,17 @@ export const ListResume = (props) => {
           }}
         >
           <Add /> &nbsp; ADD
+        </Button>
+
+        <Button
+          className="pr mr5"
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            fileUpload();
+          }}
+        >
+          <Upload /> &nbsp; Upload
         </Button>
 
         <input
