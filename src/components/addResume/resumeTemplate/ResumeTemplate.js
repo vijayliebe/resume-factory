@@ -45,11 +45,11 @@ export const ResumeTemplate = ({
   };
 
   const _resumeTemplates = [
-    // {
-    //   id: 0,
-    //   name: "Professional",
-    //   image: "resume_temp_1.jpeg",
-    // },
+    {
+      id: 0,
+      name: "Professional",
+      image: "resume_temp_1.jpeg",
+    },
     {
       id: 1,
       name: "Modern",

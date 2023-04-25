@@ -25,10 +25,10 @@
 
 }
 
-@page {
-  size: A4 portrait;
-  margin: 0 !important;
-}
+// @page {
+//   size: A4 portrait;
+//   margin: 0 !important;
+// }
 
 .circle-position {
   margin-right: 3px;
@@ -37,7 +37,7 @@
 
 .resume-temp-main-cont {
   // width: 100%;
-  padding: 0 !important;
+  // padding: 0 !important;
 
   .m-t {
     margin-top: 15px;
@@ -195,6 +195,7 @@
 
       img {
         border-radius: 50%;
+        width: 50%;
         // position: absolute;
         // left:50%;
         // transform: translateX(-50%)
@@ -264,7 +265,7 @@
 
   .projects {
     padding: 1em;
-   
+
 
     .proj-item {
       border: 1px solid #000;

@@ -1,0 +1,118 @@
+@page { size:  auto; margin: 35px; }
+
+.resume-temp-main-cont {
+    .cont-title {
+        font-weight: 700;
+        font-size: 1.3em;
+        border-bottom: 1.5px solid #000;
+        margin: 1em 0;
+    }
+
+    .dot-seperator {
+        margin: 0 5px;
+        font-weight: 900;
+    }
+
+    .head {
+        text-align: center;
+
+        .title {
+            text-transform: uppercase;
+            margin: 0.2em;
+        }
+
+        .contact-details {
+            .cd {
+                font-size: 0.8em;
+                font-weight: 500;
+            }
+
+
+        }
+    }
+
+    .line-seperator {
+        margin: 1em 1em;
+        border-bottom: 1px solid #000;
+    }
+
+    .experience {
+
+        .experience-item {
+            margin-bottom: 1.2em;
+
+            .exp-duration {
+                float: right;
+                font-size: 15px;
+                color: #000;
+            }
+
+            .exp-title1 {
+                .comp {
+                    font-size: 18px;
+                    font-weight: bold;
+                }
+
+                .comp-addr {
+                    font-size: 14px;
+                    color: #000;
+                }
+
+            }
+
+            .exp-title2 {
+                margin-bottom: 10px;
+
+                .exp-desig {
+                    font-size: 16px;
+                    font-weight: bold;
+                }
+
+            }
+
+            .resp {
+                .rolse-desc{
+                    display: list-item;
+                    margin: 0.4em 0 0.4em 2em;;
+                }
+            }
+        }
+    }
+
+    .education {
+        .edu-item{
+          margin-bottom: 1em;
+          .line{
+            line-height: 1.3em;
+          }
+          .degree{
+            font-weight: bold;
+            font-size: 16px;
+          }
+          .year{
+            font-size: 15px;
+            float: right;
+          }
+          .insti{
+            font-size: 18px;
+            font-weight: bold;
+          }
+          .add{
+            font-size: 14px;
+            color: #000;
+          }
+          .grade{
+            font-size: 11px;
+          }
+        }
+      }
+
+      .skills{
+        .skill-name{
+            width: 100px;
+            display: list-item;
+            margin: 0 0em 0.2em 1em;
+            float: left;
+        }
+      }
+}
